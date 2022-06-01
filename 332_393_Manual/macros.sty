@@ -1,0 +1,51 @@
+
+%TOC
+\renewcommand\contentsname{Table of Contents}
+
+\renewcommand\tableofcontents{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\contentsname
+        \@mkboth{%
+           \contentsname}{\contentsname}}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+    }
+%chapter
+\def\@makechapterhead#1{%
+  \vspace*{1\p@}%
+  {\parindent \z@ \centering \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \Large\bfseries\sffamily \@chapapp\space \thechapter
+        \par\nobreak
+        \vskip 5\p@
+    \fi
+    \interlinepenalty\@M
+    \Large  #1\par\nobreak
+    \vskip 40\p@
+  }}
+\renewcommand\chaptername{Lab}
+\renewcommand\appendixname{Appendix}
+
+%sections
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\large\bfseries\sffamily}}
+
+%subsection
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\bfseries\sffamily}}
+%style
+
+% We need 1" margins except on the binding edge, where it is 1 1/2"
+% Theses are single-sided, so we don't care about \evensidemargin
+\oddsidemargin 0.25in \evensidemargin 0.25in
+\marginparwidth 40pt \marginparsep 10pt
+\topmargin 0pt \headsep .5in
+\textheight 8.1in \textwidth 6in

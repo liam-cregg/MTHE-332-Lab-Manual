@@ -1,0 +1,54 @@
+\documentclass[letterpaper,11pt,openany]{book}
+\usepackage[centertags]{amsmath}
+%\usepackage[pdflatex]{fullbib-bibtex}
+\usepackage{graphicx,amsfonts,amssymb,amsthm,newlfont,macros}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{caption}
+\usepackage{hyperref}
+
+\usetikzlibrary{shapes.geometric, arrows}
+
+\newcommand\mat[1]{\boldsymbol{#1}}
+\newcommand\vect[1]{\boldsymbol{#1}}
+\newcommand\eul{\textup{e}}
+\newcommand\imag{\textup{i}}
+\makeatletter
+\let\@vwritefile\@writefile
+\def\@ADL@backpage#1{\trelax}
+\newif\ifmtcsecondpart
+\@input{classical-control.bux}
+\makeatother
+\title{MTHE 332/393 Lab Manual}
+\date{\today}
+\sloppy 
+\begin{document}
+\maketitle
+\input{preface}
+\tableofcontents
+
+\part*{\small Intentionally left blank.}
+
+\input{Project_Intro}
+\part{MTHE 393 Labs}
+
+\input{intro1}
+\input{freqresponse}
+\input{impulseresponse}
+\input{stability}
+
+\part{MTHE 332 Labs}
+
+\input{PID}
+\input{performancespecifications}
+\input{nyquist}
+\input{PIDdesign}
+\input{controlandobserve}
+
+\appendix
+\input{matlab}
+\input{simulink}
+\input{hardware}
+
+\end{document}

@@ -1,0 +1,10 @@
+2022-03-09
+- Talk w Ian about what labs are most beneficial from 332
+- Better to use physical machinery available
+- PID stuff good
+- Motivation for Nyquist is a bit unclear
+- Try to do less crunchy calculations in 430 - give matrices to students
+- For performance spec, merge second part w Lab 5 (Lab 6-> Lab 5)
+- Lab 8?
+- Lab 9 is short
+- Lab 3 and 4 from 430 good
