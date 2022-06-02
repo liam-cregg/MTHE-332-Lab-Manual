@@ -9,73 +9,73 @@ real-time on a number of so-called targets (the PC being one such target).
 \section{Starting}
 
 \begin{itemize}
-\item To use \textsf{Simulink}, one must first start \textsf{Matlab}.  After
-starting \textsf{Matlab}, you would type \verb|simulink| in the
-\textsf{Matlab} command prompt to get the \verb|Simulink Library Browser|
-window.
+    \item To use \textsf{Simulink}, one must first start \textsf{Matlab}.  After
+          starting \textsf{Matlab}, you would type \verb|simulink| in the
+          \textsf{Matlab} command prompt to get the \verb|Simulink Library Browser|
+          window.
 
-\item Selecting \verb|File|$\to$\verb|New|$\to$\verb|Model| (or
-\verb|Ctrl+N|) while in the \verb|Simulink Library Browser| will give you a
-blank model window into which you can drag-and-drop system blocks from the
-\verb|Simulink Library Browser| to build a \textsf{Simulink} model.  These
-models can be saved as \verb|*.mdl| files for future simulations and editing.
+    \item Selecting \verb|File|\(\to \)\verb|New|\(\to \)\verb|Model| (or
+          \verb|Ctrl+N|) while in the \verb|Simulink Library Browser| will give you a
+          blank model window into which you can drag-and-drop system blocks from the
+          \verb|Simulink Library Browser| to build a \textsf{Simulink} model.  These
+          models can be saved as \verb|*.mdl| files for future simulations and editing.
 \end{itemize}
 
 \section{Building a \textsf{Simulink} model}
 
 \begin{itemize}
-\item To connect the output of block~A to the input of block~B, simply
-left-click the output port of block~A and drag the line that would appear
-into the input port of the block~B.
+    \item To connect the output of block~A to the input of block~B, simply
+          left-click the output port of block~A and drag the line that would appear
+          into the input port of the block~B.
 
-\item In order to connect the output of a block into the inputs of multiple
-blocks at the same time, you can right-click on an existing connection to get
-another line and drag that connection into the input of another block.
+    \item In order to connect the output of a block into the inputs of multiple
+          blocks at the same time, you can right-click on an existing connection to get
+          another line and drag that connection into the input of another block.
 
-\item When a block is dragged into the model window, it will be given a
-generic name.  For example, when the \verb|scope| block is dragged into a
-model, it would simply be labelled as ``scope'' and if it was the second
-\verb|scope| block to be dragged into the model, it would be labelled as
-``scope2''.  It is a good practice to rename these blocks and give them more
-appropriate labels.  These names are usually suggested in the diagram of the
-models in each lab. To rename a block, simply click on the existing name once
-and edit.
+    \item When a block is dragged into the model window, it will be given a
+          generic name.  For example, when the \verb|scope| block is dragged into a
+          model, it would simply be labelled as ``scope'' and if it was the second
+          \verb|scope| block to be dragged into the model, it would be labelled as
+          ``scope2''.  It is a good practice to rename these blocks and give them more
+          appropriate labels.  These names are usually suggested in the diagram of the
+          models in each lab. To rename a block, simply click on the existing name once
+          and edit.
 \end{itemize}
 
 \section{Simulations}
 
 \begin{itemize}
-\item One could view and edit the simulation parameters by clicking on
-\begin{center}
-\verb|Simulation|$\to$\verb|Simulation Parameters|
-\end{center}
-(or \verb|Ctrl+E|) while editing the model.  For the purpose of this course,
-there are only three things that you have to worry about:
-\begin{enumerate}
-\item Start and stop time: The default start time is 0 and the default stop
-time is 10.  Usually, there is no reason to change the default start time,
-but you might find it useful to extend the stop time so that you could
-observe the simulation for a longer period of time.
+    \item One could view and edit the simulation parameters by clicking on
+          \begin{center}
+              \verb|Simulation|\(\to \)\verb|Simulation Parameters|
+          \end{center}
+          (or \verb|Ctrl+E|) while editing the model.  For the purpose of this course,
+          there are only three things that you have to worry about:
+          \begin{enumerate}
+              \item Start and stop time: The default start time is 0 and the default stop
+                    time is 10.  Usually, there is no reason to change the default start time,
+                    but you might find it useful to extend the stop time so that you could
+                    observe the simulation for a longer period of time.
 
-\item Solver Method: You must have this set to a fixed-step when implementing
-real-time controllers. The default solver is a discrete method. You need to
-change it from the default method to \verb|ode4|, which is an implementation
-of the Runge-Kutta method.
+              \item Solver Method: You must have this set to a fixed-step when implementing
+                    real-time controllers. The default solver is a discrete method. You need to
+                    change it from the default method to \verb|ode4|, which is an implementation
+                    of the Runge-Kutta method.
 
-\item Step size: The default setting of 0.001 corresponds to 1000 Hz sampling
-frequency.  This is the fastest rate at which the system can sample.
-\end{enumerate}
+              \item Step size: The default setting of 0.001 corresponds to 1000 Hz sampling
+                    frequency.  This is the fastest rate at which the system can sample.
+          \end{enumerate}
 \end{itemize}
 
 \section{Plotting}
 
 \begin{itemize}
-\item The outputs of a simulation can be captured by using the
-\verb|To Workspace| block.  The data would be recorded as a variable in
-memory of \textsf{Matlab}.  The default name of the output is \verb|simout|,
-but you should change the name of this output just as you would give
-appropriate label to the block itself.  One could plot the simulation output
-by using plot command discussed in Appendix~\ref{chap:MATLAB}\@.
+    \item The outputs of a simulation can be captured by using the
+          \verb|To Workspace| block.  The data would be recorded as a variable in
+          memory of \textsf{Matlab}.  The default name of the output is \verb|simout|,
+          but you should change the name of this output just as you would give
+          appropriate label to the block itself.  One could plot the simulation output
+          by using plot command discussed in Appendix~\ref{chap:MATLAB}\@.
 \end{itemize}
 
 \subsection{Saving data via the ``To Workspace'' block}
@@ -83,7 +83,7 @@ by using plot command discussed in Appendix~\ref{chap:MATLAB}\@.
 This is the preferred method of saving data to your \textsf{Matlab}
 workspace.  The \verb|To Workspace| block can be found at
 \begin{center}
-\verb|Simulink|$\to$\verb|Sinks|
+    \verb|Simulink|\(\to \)\verb|Sinks|
 \end{center}
 Drag this block into your workspace and connect it to the variable you wish
 to save.  Double click on the block to configure it.  Choose a good variable
@@ -92,7 +92,7 @@ name and in the \verb|save format| drop down menu select
 automatically saved to your \textsf{Matlab} workspace and you can plot it
 with the command
 \begin{center}
-\verb|plot(varname.time,varname.signals.values)|
+    \verb|plot(varname.time,varname.signals.values)|
 \end{center}
 replacing ``\verb|varname|'' with the variable name you chose when
 configuring the \verb|To Workspace| block.
@@ -104,21 +104,21 @@ loss which makes it one of the most useless blocks in the simulink library.
 Nevertheless if you need to save the data from a scope, follow these
 instructions.
 \begin{enumerate}
-\item Double click on the scope you wish to save the data from.
-\item Click on the Parameters Icon (in the top left of the scope dialog box).
-\item Data History Tab
-\begin{itemize}
-\item Uncheck box \verb|Limit data points|
-\item Check box \verb|Save data to workspace|
-\item Choose a variable name
-\item Select \verb|Array| from the Format drop down menu.
-\end{itemize}
-\item Click \verb|Apply| and \verb|OK| to exit.
+    \item Double click on the scope you wish to save the data from.
+    \item Click on the Parameters Icon (in the top left of the scope dialog box).
+    \item Data History Tab
+          \begin{itemize}
+              \item Uncheck box \verb|Limit data points|
+              \item Check box \verb|Save data to workspace|
+              \item Choose a variable name
+              \item Select \verb|Array| from the Format drop down menu.
+          \end{itemize}
+    \item Click \verb|Apply| and \verb|OK| to exit.
 \end{enumerate}
 After the simulation has been performed, the data will appear as an array in
 your \textsf{Matlab} workspace.  You can plot the data with the
 command \begin{center}
-\verb|plot(ScopeData1(:,1), ScopeData1(:,2))|
+    \verb|plot(ScopeData1(:,1), ScopeData1(:,2))|
 \end{center}
 where \verb|ScopeData1| is the variable name that you set in the above steps.
 

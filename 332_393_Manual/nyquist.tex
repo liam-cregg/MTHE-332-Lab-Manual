@@ -12,61 +12,61 @@ with such terms as \emph{crossover frequency}\@, \emph{gain margin}\@, and
 
 Before you go into the lab, you should read the following:
 \begin{itemize}
-\item Sections 7.1.2 and 7.2 from the course text on the Nyquist criterion.
+    \item Sections 7.1.2 and 7.2 from the course text on the Nyquist criterion.
 \end{itemize}
 
 \section{Procedure}
 
 \subsection{Using the Bode plot to sketch the Nyquist
-contour}\label{sec:bodeNyquist}
+    contour}\label{sec:bodeNyquist}
 
 For this part of the lab, we will be using the motor in the unity gain
 feedback configuration shown in Figure~\ref{fig:generic}\@.
 \begin{figure}[htbp]
-\centering
-\begin{picture}(230,75)
-\put(0,50){\(\hat\theta_{d}(s)\)}
-\put(25,53){\vector(1,0){15}}
-\put(45,53){\circle{7}}
-\put(32,57){+}
-\put(50,53){\vector(1,0){20}}
-\put(73,37){\framebox(35,33){$R_{C}(s)$}}
-\put(110,53){\vector(1,0){40}}
-\put(152,37){\framebox(35,33){$R_{P}(s)$}}
-\put(190,53){\vector(1,0){30}}
-\put(224,50){\(\hat\theta(s)\)}
-\put(206,53){\line(0,-1){45}}
-\put(205,8){\line(-1,0){160}}
-\put(45,8){\vector(0,1){40}}
-\put(35,48){\line (1,0) {4}}
-\end{picture}
-\caption{Feedback system with disturbance}\label{fig:generic}
+    \centering
+    \begin{picture}(230,75)
+        \put(0,50){\(\hat\theta_{d}(s)\)}
+        \put(25,53){\vector(1,0){15}}
+        \put(45,53){\circle{7}}
+        \put(32,57){+}
+        \put(50,53){\vector(1,0){20}}
+        \put(73,37){\framebox(35,33){\(R_{C}(s)\)}}
+        \put(110,53){\vector(1,0){40}}
+        \put(152,37){\framebox(35,33){\(R_{P}(s)\)}}
+        \put(190,53){\vector(1,0){30}}
+        \put(224,50){\(\hat\theta(s)\)}
+        \put(206,53){\line(0,-1){45}}
+        \put(205,8){\line(-1,0){160}}
+        \put(45,8){\vector(0,1){40}}
+        \put(35,48){\line (1,0) {4}}
+    \end{picture}
+    \caption{Feedback system with disturbance}\label{fig:generic}
 \end{figure}%
 This setup should be quite familiar to you by now, so you should have a
 well-developed intuition concerning the IBIBO stability of such a system.  We
-will be taking the output of the system to be the motor velocity, $\omega$,
-so our plant transfer function is $R_{P}(s)=\frac{k_{E}}{s+\frac{1}{\tau}}$.
+will be taking the output of the system to be the motor velocity, \(\omega \),
+so our plant transfer function is \(R_{P}(s)=\frac{k_{E}}{s+\frac{1}{\tau}}\).
 In Lab 2 you constructed the Bode plot for this system
 experimentally.
 \begin{enumerate}
-\item Using the Bode plot from Lab 2, determine the gain
-and phase crossover frequencies, and the phase and gain margins at these
-frequencies; see Section 7.2.2 from the course text.
+    \item Using the Bode plot from Lab 2, determine the gain
+          and phase crossover frequencies, and the phase and gain margins at these
+          frequencies; see Section 7.2.2 from the course text.
 
-\item Using the Bode plot determine the general transfer function, from the
-transfer function sketch the corresponding Nyquist contour.  Looking also at
-the transfer function, determine whether or not the system is IBIBO stable.
+    \item Using the Bode plot determine the general transfer function, from the
+          transfer function sketch the corresponding Nyquist contour.  Looking also at
+          the transfer function, determine whether or not the system is IBIBO stable.
 
-\item Start up \textsf{Matlab} and define \verb|t| to be the transfer
-function of the open-loop motor scheme.  Essentially, we are just setting
-$R_{C}(s)=1$ to see how motor behaves on its own.
+    \item Start up \textsf{Matlab} and define \verb|t| to be the transfer
+          function of the open-loop motor scheme.  Essentially, we are just setting
+          \(R_{C}(s)=1\) to see how motor behaves on its own.
 
-\item To plot the Nyquist contour, use the \verb|Nyquist| command in
-\textsf{Matlab}.
+    \item To plot the Nyquist contour, use the \verb|Nyquist| command in
+          \textsf{Matlab}.
 
-\item Is the Nyquist contour consistent with what you know about the IBIBO
-stability of the system?  Comment on both the poles of the transfer function,
-and the zeroes of the characteristic polynomial.
+    \item Is the Nyquist contour consistent with what you know about the IBIBO
+          stability of the system?  Comment on both the poles of the transfer function,
+          and the zeroes of the characteristic polynomial.
 \end{enumerate}
 
 \subsection{Using a proportional controller}
@@ -75,43 +75,43 @@ We will now turn our attention to the task of using the Nyquist contour as a
 tool in determining what range of values of a proportional controller can
 take on in order to make the system IBIBO stable.
 
-The plant transfer function $R_{C}(s) = K$ will be used in the feedback
+The plant transfer function \(R_{C}(s) = K\) will be used in the feedback
 configuration depicted in Figure~\ref{fig:generic}\@.  The transfer function
 for this system is simply
 \begin{equation*}
-T(s)=\frac{KR_{P}(s)}{1+KR_{P}(s)}.
+    T(s)=\frac{KR_{P}(s)}{1+KR_{P}(s)}.
 \end{equation*}
-What is important to note is that the condition $KR_{P}(s)=-1$ is equivalent
-to the condition $R_{P}=-\frac{1}{K}$. This seems obvious in itself, but what
-this allows you to do is to use the Nyquist contour for $R_{P}(s)$ on its own
-(i.e., with $K=1$), and determine where you would like the point
-$\frac{1}{K}$ to be. This allows you to get a lot of mileage out of only one
+What is important to note is that the condition \(KR_{P}(s)=-1\) is equivalent
+to the condition \(R_{P}=-\frac{1}{K}\). This seems obvious in itself, but what
+this allows you to do is to use the Nyquist contour for \(R_{P}(s)\) on its own
+(i.e., with \(K=1\)), and determine where you would like the point
+\(\frac{1}{K}\) to be. This allows you to get a lot of mileage out of only one
 plot. The alternative is to construct the Nyquist contour for many values of
-$K$, and see if each contour has the required number of encirclements of the
-point $-1+\imag0$\@.  This may not seem like a bad alternative if you have
+\(K\), and see if each contour has the required number of encirclements of the
+point \(-1+\imag0\).  This may not seem like a bad alternative if you have
 access to a computer, but the method of normalizing the proportional gain is
 much more efficient.
 
 \begin{enumerate}
-\item In \textsf{Matlab}, define the plant transfer function to be
-$R_{P}=\frac{s+1}{s(\frac{s}{10}-1)}$.
+    \item In \textsf{Matlab}, define the plant transfer function to be
+          \(R_{P}=\frac{s+1}{s(\frac{s}{10}-1)}\).
 
-\item Produce both the Bode plot and the Nyquist contour.  Take a minute to
-further reaffirm your faith in the relationship between the two.
+    \item Produce both the Bode plot and the Nyquist contour.  Take a minute to
+          further reaffirm your faith in the relationship between the two.
 
-\item What are the crossover frequencies, and what are the gain and phase
-margins at these frequencies?
+    \item What are the crossover frequencies, and what are the gain and phase
+          margins at these frequencies?
 
-\item Since our plant transfer function has one pole in the right-half
-complex plane, we require one counterclockwise encirclements of the point
-$\frac{1}{K}$. Using this information, in which region should we place the
-point $-\frac{1}{K}$?
+    \item Since our plant transfer function has one pole in the right-half
+          complex plane, we require one counterclockwise encirclements of the point
+          \(\frac{1}{K}\). Using this information, in which region should we place the
+          point \(-\frac{1}{K}\)?
 
-\item What values of $K$ satisfy the above requirement?
+    \item What values of \(K\) satisfy the above requirement?
 
-\item Repeat the above procedure for the plant transfer function
-$R_{P}(s)=\frac{1}{s(s+1)^{2}}$.  Remember, Nyquist plots always close
-clockwise.
+    \item Repeat the above procedure for the plant transfer function
+          \(R_{P}(s)=\frac{1}{s{(s+1)}^{2}}\).  Remember, Nyquist plots always close
+          clockwise.
 \end{enumerate}
 
 \subsection{The phase margin}
@@ -119,22 +119,22 @@ clockwise.
 In this part of the lab we will quickly demonstrate the phase margin as it
 applies to the Nyquist contour.
 \begin{enumerate}
-\item We will use the plant transfer function
-$R_{P}(s)=\frac{1}{s(s+1)^{2}}$.  Produce the Bode plot and the Nyquist
-contour of this system.
+    \item We will use the plant transfer function
+          \(R_{P}(s)=\frac{1}{s{(s+1)}^{2}}\).  Produce the Bode plot and the Nyquist
+          contour of this system.
 
-\item Determine how much you have to boost the gain (in decibels) to provide
-a phase margin of $0^{\circ}$ at a gain cross over frequency of
-$10^{n}\frac{\textup{rad}}{\textup{sec}}$\@, $n\in\mathbb{Z}$\@.  Will the
-resulting system, with this gain boosted by using a proportional controller,
-be IBIBO stable?
+    \item Determine how much you have to boost the gain (in decibels) to provide
+          a phase margin of \(0^{\circ}\) at a gain cross over frequency of
+          \(10^{n}\frac{\textup{rad}}{\textup{sec}}\), \(n\in\mathbb{Z}\).  Will the %chktex 35
+          resulting system, with this gain boosted by using a proportional controller,
+          be IBIBO stable?
 
-\item The number you get is a scalar that represents the factor by which you
-can ``stretch'' (or ``shrink'' as the case may be) the Nyquist contour
-towards the point $-1+\imag0$ and still maintain IBIBO stability (assuming
-the system is stable for $K=1$, which our system is).  Looking at the Nyquist
-contour, does this scalar quantity seem to make sense?  Is this consistent
-with your work from Section~\ref{sec:bodeNyquist}?
+    \item The number you get is a scalar that represents the factor by which you
+          can ``stretch'' (or ``shrink'' as the case may be) the Nyquist contour
+          towards the point \(-1+\imag0\) and still maintain IBIBO stability (assuming
+          the system is stable for \(K=1\), which our system is).  Looking at the Nyquist
+          contour, does this scalar quantity seem to make sense?  Is this consistent
+          with your work from Section~\ref{sec:bodeNyquist}?
 \end{enumerate}
 
 When you have completed the lab, make sure you save your files in the folder

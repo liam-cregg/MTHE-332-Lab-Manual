@@ -6,134 +6,134 @@ computer programming and Matlab from first year courses.
 \section{Defining variables}
 
 \begin{itemize}
-\item \verb|x=3|\\
-Defines the variable \verb|x| to be the constant 3.
-\item \verb|x=(1,2;3,4;5,6)|\\
-Defines the variable \verb|x| to be the $3 \times 2$ matrix
-\begin{equation*}
-\begin{bmatrix}1&2\\3&4\\5&6\end{bmatrix}
-\end{equation*}
-Elements of a row are delimited by commas (or spaces) and each row is
-delimited by a semicolon.
+    \item \verb|x=3|\\
+          Defines the variable \verb|x| to be the constant 3.
+    \item \verb|x=(1,2;3,4;5,6)|\\
+          Defines the variable \verb|x| to be the \(3 \times 2\) matrix
+          \begin{equation*}
+              \begin{bmatrix}1&2\\3&4\\5&6\end{bmatrix}
+          \end{equation*}
+          Elements of a row are delimited by commas (or spaces) and each row is
+          delimited by a semicolon.
 \end{itemize}
 
 \section{General Commands}
 
 \begin{itemize}
-\item \verb|dir|\\
-Displays a list of files in the current directory.
-\item  \verb|open lab_1.mdl|\\
-Opens the specific file in the argument. We will be dealing mostly with
-\verb|*.mdl| and \verb|*.m| files.
-\item \verb|who|\\
-Displays a list of variables in the memory of \textsf{Matlab}.
-\item \verb|simulink|\\
-Opens the \verb|Simulink Browser Library| window.  Using the GUI control, you
-can drag and drop the blocks to build the \textsf{Simulink} models needed for
-each lab.  Details on using \textsf{Simulink} and WinCon are discussed in
-Appendix~\ref{chap:simulink}.
+    \item \verb|dir|\\
+          Displays a list of files in the current directory.
+    \item  \verb|open lab_1.mdl|\\
+          Opens the specific file in the argument. We will be dealing mostly with
+          \verb|*.mdl| and \verb|*.m| files.
+    \item \verb|who|\\
+          Displays a list of variables in the memory of \textsf{Matlab}.
+    \item \verb|simulink|\\
+          Opens the \verb|Simulink Browser Library| window.  Using the GUI control, you
+          can drag and drop the blocks to build the \textsf{Simulink} models needed for
+          each lab.  Details on using \textsf{Simulink} and WinCon are discussed in
+          Appendix~\ref{chap:simulink}.
 \end{itemize}
 
 \section{Plotting}
 
 \begin{itemize}
-\item \verb|plot (lab_1_Tachometer)|\\
-Plots the data from the variable \verb|lab_1_Tachometer| in \textsf{Matlab} memory.
-You can check the list of variables in the \textsf{Matlab} memory by using the
-\verb|who| command.
+    \item \verb|plot (lab_1_Tachometer)|\\
+          Plots the data from the variable \verb|lab_1_Tachometer| in \textsf{Matlab} memory.
+          You can check the list of variables in the \textsf{Matlab} memory by using the
+          \verb|who| command.
 
-\item \verb|plot (lab_1_Tachometer,'r:')|\\
-Plots the result in the memory of \textsf{Matlab} and specifies the colour of
-the graph to be red and the line style to be dotted.  Colour and line format
-are optional commands and they do not have to be specified for the plot
-command to produce an output. You can also specify one style parameter
-without the other.  The default colour is blue and the default line style is
-solid.  Table~\ref{tab:colour} is a list of colours and line styles that can
-be used with the plot command.
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|c|c|}\hline
-Line style/colour & \textsf{Matlab} command\\\hline
-solid & '\verb|-|'\\\hline
-dashed &'\verb|--|'\\\hline
-dotted & '\verb|:|'\\\hline
-dash-dot&'\verb|-.|'\\\hline
-blue & '\verb|b|' or '\verb|blue|'\\\hline
-black& '\verb|k|' or '\verb|black|'\\\hline
-cyan & '\verb|c|' or '\verb|cyan|' \\ \hline
-green & '\verb|g|' or '\verb|green|' \\\hline
-magenta & '\verb|m|' or '\verb|magenta|' \\ \hline
-red & '\verb|r|' or '\verb|red|'\\ \hline
-white & '\verb|w|' or '\verb|white|'\\ \hline
-yellow &'\verb|y|' or '\verb|yellow|' \\ \hline
-\end{tabular}
-\caption{Colour commands in \textsf{Matlab}}\label{tab:colour}
-\end{table}
+    \item \verb|plot (lab_1_Tachometer,'r:')|\\
+          Plots the result in the memory of \textsf{Matlab} and specifies the colour of
+          the graph to be red and the line style to be dotted.  Colour and line format
+          are optional commands and they do not have to be specified for the plot
+          command to produce an output. You can also specify one style parameter
+          without the other.  The default colour is blue and the default line style is
+          solid.  Table~\ref{tab:colour} is a list of colours and line styles that can
+          be used with the plot command.
+          \begin{table}[htbp]
+              \centering
+              \begin{tabular}{c c}
+                  Line style/colour & \textsf{Matlab} command                                \\\toprule
+                  solid             & '\verb|-|'                              \\
+                  dashed            & '\verb|--|'                              \\
+                  dotted            & '\verb|:|'                              \\
+                  dash-dot          & '\verb|-.|'                              \\
+                  blue              & '\verb|b|' or '\verb|blue|' \\
+                  black             & '\verb|k|' or '\verb|black|' \\
+                  cyan              & '\verb|c|' or '\verb|cyan|' \\
+                  green             & '\verb|g|' or '\verb|green|' \\
+                  magenta           & '\verb|m|' or '\verb|magenta|' \\
+                  red               & '\verb|r|' or '\verb|red|' \\
+                  white             & '\verb|w|' or '\verb|white|' \\
+                  yellow            & '\verb|y|' or '\verb|yellow|' \\
+              \end{tabular}
+              \caption{Colour commands in \textsf{Matlab}}\label{tab:colour}
+          \end{table}
 
-\item \verb|title ('Angular Velocity of the Motor')|\\
-Sets the title of the plot to the text in quotations.
+    \item \verb|title ('Angular Velocity of the Motor')|\\
+          Sets the title of the plot to the text in quotations.
 
-\item \verb|xlabel ('Time (s)')|\\
-Sets the x-axis label of the plot to the text in quotations.
+    \item \verb|xlabel ('Time (s)')|\\
+          Sets the x-axis label of the plot to the text in quotations.
 
-\item \verb|ylabel ('rad/sec')|\\
-Sets the y-axis label of the plot to the text in quotations.
+    \item \verb|ylabel ('rad/sec')|\\
+          Sets the y-axis label of the plot to the text in quotations.
 
-\item \verb|hold|\\
-Hold the current graph in figure and allow the user to plot more than one set
-of data on the same figure.
+    \item \verb|hold|\\
+          Hold the current graph in figure and allow the user to plot more than one set
+          of data on the same figure.
 
-\item \verb|hold off|\\
-Release the current graph in figure and allow a new plot to replace the
-current graph.
+    \item \verb|hold off|\\
+          Release the current graph in figure and allow a new plot to replace the
+          current graph.
 \end{itemize}
 
 \section{Control System Toolbox}
 
 \begin{itemize}
-\item \verb|sys = ss(A,b,c,D)|\\
-Defines the the state-space system from matrices $\mat{A}$\@, $\vect{b}$\@,
-$\vect{c}$\@, and $\vect{D}$\@.  For a model with $n$ states and $1$ output,
-\begin{itemize}
-\item $\mat{A}$ is an $n\times n$ matrix,
-\item $\vect{b}$ is an $n\times 1$ matrix,
-\item $\vect{c}$ is a $1\times n$ matrix ($\vect{c}^{t}$ in our notation),
-and
-\item $\mat{D}=[0]$ (always true for this class).
-\end{itemize}
+    \item \verb|sys = ss(A,b,c,D)|\\
+          Defines the the state-space system from matrices \(\mat{A}\), \(\vect{b}\),
+          \(\vect{c}\), and \(\vect{D}\).  For a model with \(n\) states and \(1\) output,
+          \begin{itemize}
+              \item \(\mat{A}\) is an \(n\times n\) matrix,
+              \item \(\vect{b}\) is an \(n\times 1\) matrix,
+              \item \(\vect{c}\) is a \(1\times n\) matrix (\(\vect{c}^{t}\) in our notation),
+                    and
+              \item \(\mat{D}=[0]\) (always true for this class).
+          \end{itemize}
 
 
-\item \verb|h = tf([1 0],[1 2 10])|\\
-Defines the variable \verb|h| to be the transfer function
-\begin{equation*}
-\frac{s}{s^{2}+2s+10}.
-\end{equation*}
+    \item \verb|h = tf([1 0],[1 2 10])|\\
+          Defines the variable \verb|h| to be the transfer function
+          \begin{equation*}
+              \frac{s}{s^{2}+2s+10}.
+          \end{equation*}
 
-\item \verb|h = zpk([1 0],[-1 -2 -10],[3])|\\
-Defines the variable \verb|h| to be the transfer function using the location
-of the zeros, poles, and a multiplicative constant:
-\begin{equation*}
-\frac{3s(s-1)}{(s+1)(s+2)(s+10)}.
-\end{equation*}
+    \item \verb|h = zpk([1 0],[-1 -2 -10],[3])|\\
+          Defines the variable \verb|h| to be the transfer function using the location
+          of the zeros, poles, and a multiplicative constant:
+          \begin{equation*}
+              \frac{3s(s-1)}{(s+1)(s+2)(s+10)}.
+          \end{equation*}
 
-\item \verb|h = tf(sys)|\\
-Defines the variable \verb|h| to be the transfer function for a given
-state-space system.
+    \item \verb|h = tf(sys)|\\
+          Defines the variable \verb|h| to be the transfer function for a given
+          state-space system.
 
-\item \verb|sys = tf2ss[tf]|\\
-Gives the SISO linear system corresponding to the transfer function \verb|tf|.
+    \item \verb|sys = tf2ss[tf]|\\
+          Gives the SISO linear system corresponding to the transfer function \verb|tf|.
 
-\item \verb|bode(sys)|\\
-Produces the Bode plots for the given system.
+    \item \verb|bode(sys)|\\
+          Produces the Bode plots for the given system.
 
-\item \verb|impulse(sys)|\\
-Produces the impulse response for the given system.
+    \item \verb|impulse(sys)|\\
+          Produces the impulse response for the given system.
 
-\item \verb|nyquist(sys)|\\
-Produces the Nyquist plot for the given system.
+    \item \verb|nyquist(sys)|\\
+          Produces the Nyquist plot for the given system.
 
-\item \verb|margin(sys)|\\
-Produces the gain and phase margins with associated crossover frequencies.
+    \item \verb|margin(sys)|\\
+          Produces the gain and phase margins with associated crossover frequencies.
 \end{itemize}
 
 %%% Local Variables: 

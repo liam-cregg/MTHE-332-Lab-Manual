@@ -7,6 +7,8 @@
 \usepackage{graphics}
 \usepackage{caption}
 \usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
 
 \usetikzlibrary{shapes.geometric, arrows}
 
@@ -15,9 +17,10 @@
 \newcommand\eul{\textup{e}}
 \newcommand\imag{\textup{i}}
 \makeatletter
-\let\@vwritefile\@writefile
-\def\@ADL@backpage#1{\trelax}
-\newif\ifmtcsecondpart
+% Don't think these are needed so commented them out
+%\let\@vwritefile\@writefile
+%\def\@ADL@backpage#1{\trelax}
+%\newif\ifmtcsecondpart
 \@input{classical-control.bux}
 \makeatother
 \title{MTHE 332/393 Lab Manual}
@@ -51,4 +54,4 @@
 \input{simulink}
 \input{hardware}
 
-\end{document}
+\end{document} %chktex 17
