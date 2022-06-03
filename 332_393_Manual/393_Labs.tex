@@ -1,0 +1,45 @@
+\documentclass[letterpaper,11pt,openany]{book}
+\usepackage[centertags]{amsmath}
+%\usepackage[pdflatex]{fullbib-bibtex}
+\usepackage{graphicx,amsfonts,amssymb,amsthm,newlfont,macros}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\usetikzlibrary{shapes.geometric, arrows}
+
+\newcommand\mat[1]{\boldsymbol{#1}}
+\newcommand\vect[1]{\boldsymbol{#1}}
+\newcommand\eul{\textup{e}}
+\newcommand\imag{\textup{i}}
+\makeatletter
+% Don't think these are needed so commented them out
+%\let\@vwritefile\@writefile
+%\def\@ADL@backpage#1{\trelax}
+%\newif\ifmtcsecondpart
+\@input{classical-control.bux}
+\makeatother
+\title{MTHE 393 Lab Manual}
+\date{\today}
+\sloppy 
+\begin{document}
+\maketitle
+\tableofcontents
+
+\input{Project_Intro}
+
+\input{intro1}
+\input{freqresponse}
+\input{impulseresponse}
+\input{stability}
+
+\appendix
+\input{matlab}
+\input{simulink}
+\input{hardware}
+
+\end{document} %chktex 17
