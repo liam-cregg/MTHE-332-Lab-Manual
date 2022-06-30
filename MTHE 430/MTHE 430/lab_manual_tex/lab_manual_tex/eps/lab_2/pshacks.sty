@@ -1,0 +1,542 @@
+%%
+%% This is file `pshacks.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% pshacks.dtx  (with options: `package')
+%% 
+%% This file and all the files associated with this bundle (see the
+%% file 00readme.txt for a list) should be distributed unchanged
+%% and together.  Modified versions may be distributed, but under a
+%% different name.  The unmodified version with its original name
+%% should be included with any modified versions.
+%%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{pshacks}
+          [1998/06/22 v2.0a LaTeX drawing macros]
+\RequirePackage{pstricks,pst-eps,trig}
+
+\def\pst@@@picture[#1](#2,#3)(#4,#5){%
+\pssetxlength\pst@dima{#2}\pssetylength\pst@dimb{#3}%
+\pssetxlength\pst@dimc{#4}\pssetylength\pst@dimd{#5}%
+\def\pst@tempa{#1}%
+\setbox\pst@hbox=\hbox\bgroup
+\begingroup\KillGlue
+\@ifundefined{@latexerr}{}{\let\unitlength\psunit}%
+\edef\pic@coor{(#2,#3)(#2,#3)(#4,#5)}\move(0,0)\ignorespaces}
+
+\def\end@ClosedObj{%
+\ifpsshadow \pst@closedshadow \fi
+\ifdim\psk@border\p@>\z@ \pst@addborder \fi
+\psk@fillstyle
+\pst@stroke
+\ifpsdoubleline \pst@doublestroke \fi
+\ifshowpoints
+\pst@OpenShowPoints
+\fi
+\use@pscode
+\endgroup\@optreset
+\ignorespaces}
+
+\def\psset@fillstyle#1{%
+\edef\pst@tempg{#1}\def\pst@temph{none}%
+\ifx\pst@tempg\pst@temph
+\let\psk@fillstyle\relax
+\else
+\@ifundefined{psfs@#1}%
+{\@pstrickserr{Undefined fill style: `#1'}\@eha}%
+{\edef\psk@fillstyle{\expandafter\noexpand\csname psfs@#1\endcsname}%
+\edef\psfillstyle{#1}}%
+\fi}
+
+\newif\if@globalcolors\@globalcolorstrue
+\DeclareOption{nocolors}{\@globalcolorsfalse}
+\DeclareOption{graphics}{\def\@ADL@@graphics{\@ne}}
+\DeclareOption{graphicx}{\def\@ADL@@graphics{\z@}}
+\ExecuteOptions{graphicx}
+\ProcessOptions
+\ifnum\@ADL@@graphics=\@ne
+\RequirePackage{graphics}
+\else
+\RequirePackage{graphicx}
+\fi
+
+\psset{fillstyle=none,dash=2pt 2pt,cornersize=absolute}
+\newgray{faintgray}{0.95}
+\edef\@currcolor{white}
+\def\@forwardarrow{->}
+\def\@xcurr{0}
+\def\@ycurr{0}
+
+\newcommand\psdraw{\@ifstar{\@psdrawstar}{\@psdrawnostar}}
+\def\@psdrawstar(#1,#2)(#3,#4){\TeXtoEPS\pspicture*(#1,#2)(#3,#4)\move(0,0)}
+\def\@psdrawnostar(#1,#2)(#3,#4){\TeXtoEPS\pspicture(#1,#2)(#3,#4)\move(0,0)}
+\def\endpsdraw{\endpspicture\endTeXtoEPS}
+
+\@ifundefined{segment}{%
+\newenvironment{segment}{\savecurrpos(@xsegor,@ysegor)
+  \begingroup\let\move\@segmove\let\@coordupdate\@segcoordupdate
+  \move(0,0)}{\endgroup}}
+{\PackageWarning{pshacks}%
+  {Redefining \string\segment\space to \string\oldsegment}
+\renewenvironment{segment}{\savecurrpos(@xsegor,@ysegor)
+  \begingroup\let\move\@segmove\let\@coordupdate\@segcoordupdate
+  \move(0,0)}{\endgroup}}
+
+\newif\if@colorset\@colorsetfalse
+\newenvironment{fillcolor}[1]{\if@globalcolors\@colorsettrue
+  \psset{fillcolor=#1}\fi\edef\@currcolor{#1}}
+  {\if@globalcolors\@colorsetfalse\fi\edef\@currcolor{white}}
+\newcommand\@fillcolor[1]{\if@colorset\psset@fillcolor{\@currcolor}
+  \else\@fillcomp{#1}\@grayscale\newgray{@tempcolor}{\@grayscale}
+  \psset@fillcolor{@tempcolor}\edef\@currcolor{@tempcolor}\fi}
+\newif\if@fillstyleset\@fillstylesetfalse
+\newenvironment{fillstyle}[1]{\@fillstylesettrue\psset{fillstyle=#1}
+  \edef\@currfillstyle{#1}}{\@fillstylesetfalse\edef\@currfillstyle{none}}
+\newcommand\@fillstyle{\if@fillstyleset\psset@fillstyle{\@currfillstyle}\else
+  \psset@fillstyle{solid}\fi}
+\newcommand\@optreset{\psset@fillcolor{white}\psset@fillstyle{none}}
+
+\def\@scale{1}
+\def\@segscale{1}
+\newcommand\setscale[1]{\realmult{1}{#1}\@scale \psset{unit=\@scale cm}}
+\newcommand\setrelscale[1]{\realmult{\@scale}{#1}\@scale
+  \psset{unit=\@scale cm}}
+\newcommand\setsegscale[1]{\move(\@@@xsegor@@,\@@@ysegor@@)
+  \realmult{1}{#1}\@segscale \psset{unit=\@segscale cm}
+  \realdiv{\@@@xsegor@@}{\@segscale}\@@@xsegor@@
+  \realdiv{\@@@ysegor@@}{\@segscale}\@@@ysegor@@}
+\newcommand\setrelsegscale[1]{\move(\@@@xsegor@@,\@@@ysegor@@)
+  \realmult{\@segscale}{#1}\@segscale \psset{unit=\@segscale cm}
+  \realdiv{\@@@xsegor@@}{\@segscale}\@@@xsegor@@
+  \realdiv{\@@@ysegor@@}{\@segscale}\@@@ysegor@@}
+
+\def\@coordupdate(#1,#2){\@realadd{\@xcurr}{#1}\@xcurr
+  \@realadd{\@ycurr}{#2}\@ycurr}
+\def\@segcoordupdate(#1,#2){\realadd{\@xcurr}{#1}\@xcurr
+  \realadd{\@ycurr}{#2}\@ycurr}
+\newcommand\@polarcoordupdate[2]{\@polartocart{#1}{#2}\@xincr\@yincr
+  \@coordupdate(\@xincr,\@yincr)}
+\newcommand\@polartocart[4]{\CalculateCos{#2}\CalculateSin{#2}
+  \realmult{#1}{\UseCos{#2}}{#3}\realmult{#1}{\UseSin{#2}}{#4}}
+
+\def\savecurrpos(#1,#2){\expandafter\let\csname @@#1@@\endcsname\@xcurr
+  \expandafter\let\csname @@#2@@\endcsname\@ycurr}
+\newcommand\usecoor[1]{\csname @@#1@@\endcsname}
+\newcommand\cpair[1]{\usecoor{x#1},\usecoor{y#1}}
+
+\def\move(#1,#2){\xdef\@xcurr{#1}\xdef\@ycurr{#2}}
+\def\relmove(#1,#2){\@coordupdate(#1,#2)}
+\newcommand\rmove[2]{\@polarcoordupdate{#1}{#2}}
+\def\@segmove(#1,#2){\realadd{\@@@xsegor@@}{#1}\@xcurr
+  \realadd{\@@@ysegor@@}{#2}\@ycurr}
+
+\newcommand\scalelines[1]{\realmult{#1}{0.8}\@temp\psset{linewidth=\@temp pt}}
+\newcommand\dashedlines{\psset{linestyle=dashed}}
+\PackageWarning{pshacks}{Redefining \string\vec\space to \string\oldvec}
+\let\oldvec\vec
+\renewcommand\vec{\@ifstar{\@vecstar}{\@vecnostar}}
+\newcommand\@vecstar{\@ifnextchar[{\@dashvec}{\@dashvec[-]}}
+\newcommand\@vecnostar{\@ifnextchar[{\@vec}{\@vec[-]}}
+\def\@dashvec[#1](#2,#3){\savecurrpos(@xtemp,@ytemp)\move(#2,#3)
+  \psline[linestyle=dashed]{#1}(\usecoor{@xtemp},\usecoor{@ytemp})%
+  (\@xcurr,\@ycurr)}
+\def\@vec[#1](#2,#3){\savecurrpos(@xtemp,@ytemp)\move(#2,#3)
+  \psline{#1}(\usecoor{@xtemp},\usecoor{@ytemp})(\@xcurr,\@ycurr)}
+\newcommand\relvec{\@ifstar{\@relvecstar}{\@relvecnostar}}
+\newcommand\@relvecstar{\@ifnextchar[{\@reldashvec}{\@reldashvec[-]}}
+\newcommand\@relvecnostar{\@ifnextchar[{\@relvec}{\@relvec[-]}}
+\def\@reldashvec[#1](#2,#3){\savecurrpos(@xtemp,@ytemp)\@coordupdate(#2,#3)
+  \psline[linestyle=dashed]{#1}(\usecoor{@xtemp},\usecoor{@ytemp})%
+  (\@xcurr,\@ycurr)}
+\def\@relvec[#1](#2,#3){\savecurrpos(@xtemp,@ytemp)\@coordupdate(#2,#3)
+  \psline{#1}(\usecoor{@xtemp},\usecoor{@ytemp})(\@xcurr,\@ycurr)}
+\newcommand\rvec{\@ifstar{\@rvecstar}{\@rvecnostar}}
+\newcommand\@rvecstar{\@ifnextchar[{\@rdashvec}{\@rdashvec[-]}}
+\newcommand\@rvecnostar{\@ifnextchar[{\@rvec}{\@rvec[-]}}
+\def\@rdashvec[#1]#2#3{\savecurrpos(@xtemp,@ytemp)\@polarcoordupdate{#2}{#3}
+  \psline[linestyle=dashed]{#1}(\usecoor{@xtemp},\usecoor{@ytemp})%
+  (\@xcurr,\@ycurr)}
+\def\@rvec[#1]#2#3{\savecurrpos(@xtemp,@ytemp)\@polarcoordupdate{#2}{#3}
+  \psline{#1}(\usecoor{@xtemp},\usecoor{@ytemp})(\@xcurr,\@ycurr)}
+
+\newcommand\rdblaveclbl{\@ifstar{\@rdblaveclblstar}{\@rdblaveclblnostar}}
+\newcommand\@rdblaveclblstar[4]{\savecurrpos(@xtemp,@ytemp)
+  \realmult{#1}{0.5}\@halflen\realmult{#4}{0.5}\@halfgap
+  \realadd{\@halflen}{-\@halfgap}\@linelen
+  {\psset{linestyle=dashed}\rvec[<-]{\@linelen}{#2}\rmove{\@halfgap}{#2}
+  \rput(\@xcurr,\@ycurr){#3}\rmove{\@halfgap}{#2}\rvec[->]{\@linelen}{#2}}
+  \move(\usecoor{@xtemp},\usecoor{@ytemp})}
+\newcommand\@rdblaveclblnostar[4]{\savecurrpos(@xtemp,@ytemp)
+  \realmult{#1}{0.5}\@halflen
+  \realmult{#4}{0.5}\@halfgap\realadd{\@halflen}{-\@halfgap}\@linelen
+  \rvec[<-]{\@linelen}{#2}\rmove{\@halfgap}{#2}\rput(\@xcurr,\@ycurr){#3}
+  \rmove{\@halfgap}{#2}\rvec[->]{\@linelen}{#2}
+  \move(\usecoor{@xtemp},\usecoor{@ytemp})}
+
+\@ifundefined{cir}{%
+\newcommand\cir{\@ifstar{\@cirstar}{\@cirnostar}}}
+{\PackageWarning{pshacks}{Redefining \string\cir to \string\oldcir}
+\let\oldcir\cir
+\renewcommand\cir{\@ifstar{\@cirstar}{\@cirnostar}}}
+\newcommand\@cirstar{\@ifnextchar[{\@dashfcir}{\@dashlcir}}
+\newcommand\@cirnostar{\@ifnextchar[{\@fcir}{\@lcir}}
+\newcommand\@dashlcir[1]{\pscircle[linestyle=dashed](\@xcurr,\@ycurr){#1}}
+\def\@dashfcir[#1]#2{\@fillcolor{#1}\@fillstyle%
+  \pscircle[fillcolor=\@currcolor,fillstyle=solid,linestyle=dashed]%
+  (\@xcurr,\@ycurr){#2}\@optreset}
+\newcommand\@lcir[1]{\pscircle(\@xcurr,\@ycurr){#1}}
+\def\@fcir[#1]#2{\@fillcolor{#1}\@fillstyle\pscircle[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle](\@xcurr,\@ycurr){#2}\@optreset}
+
+\newcommand\rarrow[1]{\rmove{-0.01}{#1}\rvec[->]{0.01}{#1}}
+
+\newcommand\cengrav[1]{\cir[0]{#1}\oldpswedge[fillcolor=black,fillstyle=solid]%
+  (\@xcurr,\@ycurr){#1}{0}{90}\oldpswedge[fillcolor=black,fillstyle=solid]%
+  (\@xcurr,\@ycurr){#1}{180}{270}}
+
+\newcommand\arc{\@ifstar{\@arcstar}{\@arcnostar}}
+\newcommand\@arcstar{\@ifnextchar[{\@dasharc}{\@dasharc[-]}}
+\newcommand\@arcnostar{\@ifnextchar[{\@arc}{\@arc[-]}}
+\def\@dasharc[#1]#2(#3,#4){\psarc[linestyle=dashed]{#1}(\@xcurr,\@ycurr)%
+  {#2}{#3}{#4}}
+\def\@arc[#1]#2(#3,#4){\psarc{#1}(\@xcurr,\@ycurr){#2}{#3}{#4}}
+\newcommand\dblarclbl{\@ifstar{\@dblarclblstar}{\@dblarclblnostar}}
+\def\@dblarclblstar{\@ifnextchar[{\@dblarclblstararr}{\@dblarclblstarnoarr}}
+\def\@dblarclblstararr[#1]#2(#3,#4)#5#6
+  {\def\@arrowarg{#1}\@angle{#3}\@angone\@angle{#4}\@angtwo
+  \realadd{\@angtwo}{-\@angone}\@testarc\realcomp{\@testarc}{0}\@testres
+  \ifx\@testres\@gtest\realadd{\@testarc}{0}\@larc\else
+  \ifx\@testres\@ltest\realadd{\@testarc}{360}\@larc\else\errmessage{Angles for
+  dblarclbl are equal}\fi\fi
+  \realmult{#6}{0.5}\@halfgap\realmult{\@larc}{0.5}\@halfarc
+  \realadd{\@halfarc}{-\@halfgap}\@arcdraw\realadd{\@angone}{\@arcdraw}\@dumang
+  \ifx\@arrowarg\@forwardarrow
+    \psarc[linestyle=dashed]{-}(\@xcurr,\@ycurr){#2}{\@angone}{\@dumang}
+  \else
+    \psarc[linestyle=dashed]{<-}(\@xcurr,\@ycurr){#2}{\@angone}{\@dumang}
+  \fi
+  \realadd{\@angtwo}{-\@arcdraw}\@dumang
+  \ifx\@arrowarg\@forwardarrow
+    \psarc[linestyle=dashed]{->}(\@xcurr,\@ycurr){#2}{\@dumang}{\@angtwo}
+  \else
+    \psarc[linestyle=dashed]{-}(\@xcurr,\@ycurr){#2}{\@dumang}{\@angtwo}
+  \fi
+  \realadd{\@dumang}{-\@halfgap}\@lblang
+  \@polartocart{#2}{\@lblang}\@xtemp\@ytemp
+  \realadd{\@xtemp}{\@xcurr}\@xtemp\realadd{\@ytemp}{\@ycurr}\@ytemp
+  \rput(\@xtemp,\@ytemp){#5}}
+\def\@dblarclblstarnoarr#1(#2,#3)#4#5{\@angle{#2}\@angone\@angle{#3}\@angtwo
+  \realadd{\@angtwo}{-\@angone}\@testarc\realcomp{\@testarc}{0}\@testres
+  \ifx\@testres\@gtest\realadd{\@testarc}{0}\@larc\else
+  \ifx\@testres\@ltest\realadd{\@testarc}{360}\@larc\else\errmessage{Angles for
+  dblarclbl are equal}\fi\fi
+  \realmult{#5}{0.5}\@halfgap\realmult{\@larc}{0.5}\@halfarc
+  \realadd{\@halfarc}{-\@halfgap}\@arcdraw\realadd{\@angone}{\@arcdraw}\@dumang
+  \psarc[linestyle=dashed]{<-}(\@xcurr,\@ycurr){#1}{\@angone}{\@dumang}
+  \realadd{\@angtwo}{-\@arcdraw}\@dumang
+  \psarc[linestyle=dashed]{->}(\@xcurr,\@ycurr){#1}{\@dumang}{\@angtwo}
+  \realadd{\@dumang}{-\@halfgap}\@lblang
+  \@polartocart{#1}{\@lblang}\@xtemp\@ytemp
+  \realadd{\@xtemp}{\@xcurr}\@xtemp\realadd{\@ytemp}{\@ycurr}\@ytemp
+  \rput(\@xtemp,\@ytemp){#4}}
+\def\@dblarclblnostar{\@ifnextchar[{\@dblarclblnostarnoarr}
+  {\@dblarclblnostararr}}
+\def\@dblarclblnostarnoarr[#1]#2(#3,#4)#5#6
+  {\def\@arrowarg{#1}\@angle{#3}\@angone\@angle{#4}\@angtwo
+  \realadd{\@angtwo}{-\@angone}\@testarc\realcomp{\@testarc}{0}\@testres
+  \ifx\@testres\@gtest\realadd{\@testarc}{0}\@larc\else
+  \ifx\@testres\@ltest\realadd{\@testarc}{360}\@larc\else\errmessage{Angles for
+  dblarclbl are equal}\fi\fi
+  \realmult{#6}{0.5}\@halfgap\realmult{\@larc}{0.5}\@halfarc
+  \realadd{\@halfarc}{-\@halfgap}\@arcdraw\realadd{\@angone}{\@arcdraw}\@dumang
+  \ifx\@arrowarg\@forwardarrow
+    \psarc{-}(\@xcurr,\@ycurr){#2}{\@angone}{\@dumang}
+  \else
+    \psarc{<-}(\@xcurr,\@ycurr){#2}{\@angone}{\@dumang}
+  \fi
+  \realadd{\@angtwo}{-\@arcdraw}\@dumang
+  \ifx\@arrowarg\@forwardarrow
+    \psarc{->}(\@xcurr,\@ycurr){#2}{\@dumang}{\@angtwo}
+  \else
+    \psarc{-}(\@xcurr,\@ycurr){#2}{\@dumang}{\@angtwo}
+  \fi
+  \realadd{\@dumang}{-\@halfgap}\@lblang
+  \@polartocart{#2}{\@lblang}\@xtemp\@ytemp
+  \realadd{\@xtemp}{\@xcurr}\@xtemp\realadd{\@ytemp}{\@ycurr}\@ytemp
+  \rput(\@xtemp,\@ytemp){#5}}
+\def\@dblarclblnostararr#1(#2,#3)#4#5{\@angle{#2}\@angone\@angle{#3}\@angtwo
+  \realadd{\@angtwo}{-\@angone}\@testarc\realcomp{\@testarc}{0}\@testres
+  \ifx\@testres\@gtest\realadd{\@testarc}{0}\@larc\else
+  \ifx\@testres\@ltest\realadd{\@testarc}{360}\@larc\else\errmessage{Angles for
+  dblarclbl are equal}\fi\fi
+  \realmult{#5}{0.5}\@halfgap\realmult{\@larc}{0.5}\@halfarc
+  \realadd{\@halfarc}{-\@halfgap}\@arcdraw\realadd{\@angone}{\@arcdraw}\@dumang
+  \psarc{<-}(\@xcurr,\@ycurr){#1}{\@angone}{\@dumang}
+  \realadd{\@angtwo}{-\@arcdraw}\@dumang
+  \psarc{->}(\@xcurr,\@ycurr){#1}{\@dumang}{\@angtwo}
+  \realadd{\@dumang}{-\@halfgap}\@lblang
+  \@polartocart{#1}{\@lblang}\@xtemp\@ytemp
+  \realadd{\@xtemp}{\@xcurr}\@xtemp\realadd{\@ytemp}{\@ycurr}\@ytemp
+  \rput(\@xtemp,\@ytemp){#4}}
+
+\PackageWarning{pshacks}{Redefining \string\pswedge\space to
+\string\oldpswedge}
+\let\oldpswedge\pswedge
+\renewcommand\pswedge{\@ifstar{\@wedgestar}{\@wedgenostar}}
+\newcommand\@wedgestar{\@ifnextchar[{\@dashfwedge}{\@dashlwedge}}
+\newcommand\@wedgenostar{\@ifnextchar[{\@fwedge}{\@lwedge}}
+\def\@dashlwedge#1(#2,#3){\oldpswedge[linestyle=dashed]{#1}{#2}{#3}}
+\def\@dashfwedge[#1]#2(#3,#4){\@fillcolor{#1}\@fillstyle%
+  \oldpswedge[fillcolor=\@currcolor,fillstyle=\psfillstyle,linestyle=dashed]%
+  (\@xcurr,\@ycurr){#2}{#3}{#4}\@optreset}
+\def\@lwedge#1(#2,#3){\oldpswedge{#1}{#2}{#3}}
+\def\@fwedge[#1]#2(#3,#4){\@fillcolor{#1}\@fillstyle%
+  \oldpswedge[fillcolor=\@currcolor,fillstyle=\psfillstyle](\@xcurr,\@ycurr)%
+  {#2}{#3}{#4}\@optreset}
+
+\newcommand\ellip{\@ifstar{\@ellipstar}{\@ellipnostar}}
+\newcommand\@ellipstar{\@ifnextchar[{\@dashfellip}{\@dashlellip}}
+\newcommand\@ellipnostar{\@ifnextchar[{\@fellip}{\@lellip}}
+\def\@dashfellip[#1]#2#3#4{\@fillcolor{#1}\@fillstyle%
+  \rput{#4}(\@xcurr,\@ycurr){\psellipse[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle,linestyle=dashed](0,0)(#2,#3)}\@optreset}
+\newcommand\@dashlellip[3]{\rput{#3}(\@xcurr,\@ycurr)%
+  {\psellipse[linestyle=dashed](0,0)(#1,#2)}}
+\def\@fellip[#1]#2#3#4{\@fillcolor{#1}\@fillstyle\rput{#4}(\@xcurr,\@ycurr){%
+  \psellipse[fillcolor=\@currcolor,fillstyle=\psfillstyle](0,0)(#2,#3)}%
+  \@optreset}
+\newcommand\@lellip[3]{\rput{#3}(\@xcurr,\@ycurr){\psellipse(0,0)(#1,#2)}}
+
+\newcommand\elliparc{\@ifstar{\@elliparcstar}{\@elliparcnostar}}
+\def\@elliparcstar#1#2(#3,#4)#5{\rput{#5}(\@xcurr,\@ycurr)%
+  {\psellipsearc[linestyle=dashed](0,0)(#1,#2){#3}{#4}}}
+\def\@elliparcnostar#1#2(#3,#4)#5{\rput{#5}(\@xcurr,\@ycurr)%
+  {\psellipsearc(0,0)(#1,#2){#3}{#4}}}
+\newcommand\psellipsearc{\def\pst@par{}\pst@object{psellipsearc}}
+\def\psellipsearc@i(#1){\@ifnextchar(%
+  {\psellipsearc@ii(#1)}{\psellipsearc@ii(0,0)(#1)}}
+\def\psellipsearc@ii(#1)(#2)#3#4{%
+  \begin@ClosedObj
+  \pst@getcoor{#1}\pst@tempa
+  \pst@@getcoor{#2}%
+  \addto@pscode{%
+  #3 #4
+  \pst@coor
+  \ifdim\psk@dimen\p@=\z@\else
+  \psk@dimen CLW mul dup 3 1 roll
+  sub 3 1 roll sub exch
+  \fi
+  \pst@tempa
+  \tx@Ellipse1}
+  \def\pst@linetype{2}%
+  \end@ClosedObj}
+
+\newcommand\drawrbox{\@ifstar{\@drawrboxstar}{\@drawrboxnostar}}
+\newcommand\@drawrboxstar[1]{\@ifnextchar[{\@dashfillbox{#1}}
+  {\@dashnofillbox{#1}}}
+\newcommand\@drawrboxnostar[1]{\@ifnextchar[{\@fillbox{#1}}{\@nofillbox{#1}}}
+\def\@dashfillbox#1[#2](#3,#4){\@ifnextchar[{\@dashfillboxref{#1}[#2](#3,#4)}
+  {\@dashfillboxref{#1}[#2](#3,#4)[cc]}}
+\def\@fillbox#1[#2](#3,#4){\@ifnextchar[{\@fillboxref{#1}[#2](#3,#4)}
+  {\@fillboxref{#1}[#2](#3,#4)[cc]}}
+\def\@dashfillboxref#1[#2](#3,#4)[#5]{\@fillcolor{#2}\@fillstyle
+  \@boxstart{#5}{#3}{#4}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle,linestyle=dashed]%
+  (\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}\@optreset}
+\def\@fillboxref#1[#2](#3,#4)[#5]{\@fillcolor{#2}\@fillstyle
+  \@boxstart{#5}{#3}{#4}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle](\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}%
+  \@optreset}
+\def\@dashnofillbox#1(#2,#3){\@ifnextchar[{\@dashnofillboxref{#1}(#2,#3)}
+  {\@dashnofillboxref{#1}(#2,#3)[cc]}}
+\def\@nofillbox#1(#2,#3){\@ifnextchar[{\@nofillboxref{#1}(#2,#3)}
+  {\@nofillboxref{#1}(#2,#3)[cc]}}
+\def\@dashnofillboxref#1(#2,#3)[#4]{
+  \@boxstart{#4}{#2}{#3}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[linestyle=dashed]%
+  (\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}}
+\def\@nofillboxref#1(#2,#3)[#4]{
+  \@boxstart{#4}{#2}{#3}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe(\@xoffstart,\@yoffstart)%
+  (\@xoffend,\@yoffend)}}
+\newcommand\drawhbox{\@ifstar{\drawrbox*{0}}{\drawrbox{0}}}
+\newcommand\drawrcbox{\@ifstar{\@drawrcboxstar}{\@drawrcboxnostar}}
+\newcommand\@drawrcboxstar[1]{\@ifnextchar[{\@dashfillcbox{#1}}
+  {\@dashnofillcbox{#1}}}
+\newcommand\@drawrcboxnostar[1]{\@ifnextchar[{\@fillcbox{#1}}
+  {\@nofillcbox{#1}}}
+\def\@dashfillcbox#1[#2](#3,#4)#5{\@ifnextchar[
+  {\@dashfillcboxref{#1}[#2](#3,#4){#5}}
+  {\@dashfillcboxref{#1}[#2](#3,#4){#5}[cc]}}
+\def\@fillcbox#1[#2](#3,#4)#5{\@ifnextchar[{\@fillcboxref{#1}[#2](#3,#4){#5}}
+  {\@fillcboxref{#1}[#2](#3,#4){#5}[cc]}}
+\def\@dashfillcboxref#1[#2](#3,#4)#5[#6]{\@fillcolor{#2}\@fillstyle
+  \@boxstart{#6}{#3}{#4}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle,linearc=#5,linestyle=dashed]%
+  (\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}\@optreset}
+\def\@fillcboxref#1[#2](#3,#4)#5[#6]{\@fillcolor{#2}\@fillstyle
+  \@boxstart{#6}{#3}{#4}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[fillcolor=\@currcolor,%
+  fillstyle=\psfillstyle,linearc=#5]%
+  (\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}\@optreset}
+\def\@dashnofillcbox#1(#2,#3)#4{\@ifnextchar[
+  {\@dashnofillcboxref{#1}(#2,#3){#4}}{\@dashnofillcboxref{#1}(#2,#3){#4}[cc]}}
+\def\@nofillcbox#1(#2,#3)#4{\@ifnextchar[{\@nofillcboxref{#1}(#2,#3){#4}}
+  {\@nofillcboxref{#1}(#2,#3){#4}[cc]}}
+\def\@dashnofillcboxref#1(#2,#3)#4[#5]{
+  \@boxstart{#5}{#2}{#3}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[linearc=#4,linestyle=dashed]%
+  (\@xoffstart,\@yoffstart)(\@xoffend,\@yoffend)}}
+\def\@nofillcboxref#1(#2,#3)#4[#5]{
+  \@boxstart{#5}{#2}{#3}\@xoffstart\@yoffstart\@xoffend\@yoffend
+  \rput{#1}(\@xcurr,\@ycurr){\psframe[linearc=#4](\@xoffstart,\@yoffstart)%
+  (\@xoffend,\@yoffend)}}
+\newcommand\drawhcbox{\@ifstar{\drawrcbox*{0}}{\drawrcbox{0}}}
+
+\def\@ltest{l}
+\def\@lbtest{lb}
+\def\@lttest{lt}
+\def\@rtest{r}
+\def\@rbtest{rb}
+\def\@rttest{rt}
+\def\@btest{b}
+\def\@ttest{t}
+\newcommand\@boxstart[7]{\def\@temp{#1} \realmult{#2}{-0.5}{#4}
+  \realmult{#3}{-0.5}{#5}
+  \ifx \@temp\@ltest
+    \realmult{#2}{0.0}{#4} \realmult{#3}{-0.5}{#5}
+  \fi
+  \ifx \@temp\@lbtest
+    \realmult{#2}{0.0}{#4} \realmult{#3}{0.0}{#5}
+  \fi
+  \ifx \@temp\@lttest
+    \realmult{#2}{0.0}{#4} \realmult{#3}{-1.0}{#5}
+  \fi
+  \ifx \@temp\@rtest
+    \realmult{#2}{-1.0}{#4} \realmult{#3}{-0.5}{#5}
+  \fi
+  \ifx \@temp\@rbtest
+    \realmult{#2}{-1.0}{#4} \realmult{#3}{0.0}{#5}
+  \fi
+  \ifx \@temp\@rttest
+    \realmult{#2}{-1.0}{#4} \realmult{#3}{-1.0}{#5}
+  \fi
+  \ifx \@temp\@btest
+    \realmult{#2}{-0.5}{#4} \realmult{#3}{0.0}{#5}
+  \fi
+  \ifx \@temp\@ttest
+    \realmult{#2}{-0.5}{#4} \realmult{#3}{-1.0}{#5}
+  \fi
+  \realadd{#4}{#2}{#6} \realadd{#5}{#3}{#7}}
+
+\newcommand\polygon{\@ifstar{\@polygonstar}{\@polygonnostar}}
+\newcommand\@polygonstar{\@ifnextchar[{\@dashfillpolygon}
+  {\@dashnofillpolygon}}
+\newcommand\@polygonnostar{\@ifnextchar[{\@fillpolygon}{\pspolygon}}
+\def\@dashfillpolygon[#1]{\@fillcolor{#1}\@fillstyle%
+  \pspolygon[fillstyle=\psfillstyle,fillcolor=\@currcolor,linestyle=dashed]%
+  }
+\newcommand\@dashnofillpolygon{\pspolygon[linestyle=dashed]}
+\def\@fillpolygon[#1]{\@fillcolor{#1}\@fillstyle%
+  \pspolygon[fillstyle=\psfillstyle,fillcolor=\@currcolor]}
+
+\newcommand\cvec{\@ifstar{\@cvecstar}{\@cvecnostar}}
+\newcommand\@cvecstar{\@ifnextchar[{\@dashcvec}{\@dashcvec[-]}}
+\newcommand\@cvecnostar{\@ifnextchar[{\@cvec}{\@cvec[-]}}
+\def\@dashcvec[#1]{\psbezier[linestyle=dashed]{#1}}
+\def\@cvec[#1]{\psbezier{#1}}
+
+\newcommand\openspline{\@ifstar{\@opensplinestar}{\@opensplinenostar}}
+\newcommand\@opensplinestar{\@ifnextchar[{\@dashopenspline}
+  {\@dashopenspline[-]}}
+\newcommand\@opensplinenostar{\@ifnextchar[{\@openspline}{\@openspline[-]}}
+\def\@dashopenspline[#1]{\pscurve[linestyle=dashed]{#1}}
+\def\@openspline[#1]{\pscurve{#1}}
+\newcommand\closedspline{\@ifstar{\@closedsplinestar}{\@closedsplinenostar}}
+\newcommand\@closedsplinestar{\@ifnextchar[{\@dashfillclosedspline}
+  {\@dashnofillclosedspline}}
+\newcommand\@closedsplinenostar{\@ifnextchar[{\@fillclosedspline}{\psccurve}}
+\def\@dashfillclosedspline[#1]{\@fillcolor{#1}\@fillstyle%
+  \psccurve[fillcolor=\@currcolor,fillstyle=\psfillstyle,linestyle=dashed]}
+\def\@fillclosedspline[#1]{\@fillcolor{#1}\@fillstyle%
+  \psccurve[fillcolor=\@currcolor,fillstyle=\psfillstyle]}
+\newcommand\@dashnofillclosedspline{\psccurve[linestyle=dashed]}
+\newcommand\espline{\@ifstar{\@esplinestar}{\@esplinenostar}}
+\newcommand\@esplinestar{\@ifnextchar[{\@dashespline}{\@dashespline[-]}}
+\newcommand\@esplinenostar{\@ifnextchar[{\@espline}{\psecurve}}
+\def\@dashespline[#1]{\psecurve[linestyle=dashed]{#1}}
+\def\@espline[#1]{\psecurve{#1}}
+
+\newcommand\htext{\@ifnextchar[{\@htextref}{\@htextnoref}}
+\def\@htextref[#1]#2{\rput[#1](\@xcurr,\@ycurr){#2}}
+\newcommand\@htextnoref[1]{\rput(\@xcurr,\@ycurr){#1}}
+\newcommand\rtext[1]{\@ifnextchar[{\@rtextref{#1}}{\@rtextnoref{#1}}}
+\def\@rtextref#1[#2]#3{\rput[#2]{#1}(\@xcurr,\@ycurr){#3}}
+\newcommand\@rtextnoref[2]{\rput{#1}(\@xcurr,\@ycurr){#2}}
+\newcommand\vtext{\rtext{90}}
+
+\newcommand\epsmake[1]{\PSTtoEPS{#1.eps}{\input{#1.tex}}}
+\newcommand\epsput[1]{\rput(0,0){\includegraphics{#1.eps}}}
+\newcommand\epsmp[1]{\epsmake{#1}\epsput{#1}}
+
+\newcount\t@counta
+\newcount\t@countb
+\newcount\t@countc
+\newcount\t@countd
+\newcount\t@counte
+\newcommand\realdiv[3]{\dimen0=#1pt \t@counta=\dimen0 \dimen0=#2pt
+  \t@countb=\dimen0 \intdiv \t@counta \t@countb #3}
+\newcommand\intdiv[3]{\t@counta=#1 \t@countb=#2 \ifnum \t@countb<0
+  \t@counta=-\t@counta \t@countb=-\t@countb \fi \t@countd=1
+  \ifnum \t@counta<0 \t@counta=-\t@counta \t@countd=-1 \fi
+  \t@countc=\t@counta  \divide \t@countc by \t@countb
+  \t@counte=\t@countc  \multiply \t@counte by \t@countb
+  \advance \t@counta by -\t@counte \t@counte=-1
+  \loop \advance \t@counte by 1 \ifnum \t@counte<16
+  \multiply \t@countc by 2 \multiply \t@counta by 2
+  \ifnum \t@counta<\t@countb \else \advance \t@countc by 1
+  \advance \t@counta by -\t@countb \fi \repeat
+  \divide \t@countb by 2 \ifnum \t@counta<\t@countb \advance \t@countc by 1
+  \fi \ifnum \t@countd<0 \t@countc=-\t@countc \fi
+  \dimen0=\t@countc sp \edef #3{\expandafter\c@lean\the\dimen0}}
+\newcommand\@realadd[3]{\dimen0=#1pt \dimen2=#2pt \advance \dimen0 by \dimen2
+  \xdef #3{\expandafter\c@lean\the\dimen0}}
+\newcommand\realadd[3]{\dimen0=#1pt \dimen2=#2pt \advance \dimen0 by \dimen2
+  \edef #3{\expandafter\c@lean\the\dimen0}}
+\newcommand\@realmult[3]{\dimen0=#1pt \dimen2=#2\dimen0
+  \xdef #3{\expandafter\c@lean\the\dimen2}}
+\newcommand\realmult[3]{\dimen0=#1pt \dimen2=#2\dimen0
+  \edef #3{\expandafter\c@lean\the\dimen2}}
+\def\@ltest{l}
+\def\@gtest{g}
+\def\@etest{e}
+\newcommand\realcomp[3]{\dimen0=#1pt \dimen2=#2pt \ifdim \dimen0 > \dimen2
+  \def #3{g} \else \ifdim \dimen0 < \dimen2 \def #3{l} \else
+  \def #3{e} \fi \fi}
+\newcommand\@angle[2]{\dimen0=#1pt \ifdim\dimen0<\z@\realadd{#1}{360}{#2}
+  \else \edef #2{\expandafter\c@lean\the\dimen0}\fi}
+\newcommand\@fillcomp[2]{\realadd{#1}{-1}\@tempa\realmult{\@tempa}{-1}#2}
+{\catcode`\p=12 \catcode`\t=12
+ \gdef\c@lean #1pt{#1}}
+
+\def\grmove(#1,#2){\@realmult{#1}{\xscale}\@temp
+  \@realadd{\@temp}{\xoff}\xgrpos \@realmult{#2}{\yscale}\@temp
+  \@realadd{\@temp}{\yoff}\ygrpos \move(\xgrpos,\ygrpos)}
+\newcommand\grvec{\@ifnextchar[{\@grvec}{\@grvec[-]}}
+\def\@grvec[#1](#2,#3){\@realmult{#2}{\xscale}\@temp
+  \@realadd{\@temp}{\xoff}\xgrpos \@realmult{#3}{\yscale}\@temp
+  \@realadd{\@temp}{\yoff}\ygrpos \vec[#1](\xgrpos,\ygrpos)}
+\def\grrelmove(#1,#2){\@realmult{#1}{\xscale}\xgrpos
+  \@realmult{#2}{\yscale}\ygrpos \relmove(\xgrpos,\ygrpos)}
+\newcommand\grrelvec{\@ifnextchar[{\@grrelvec}{\@grrelvec[-]}}
+\def\@grrelvec[#1](#2,#3){\@realmult{#2}{\xscale}\xgrpos
+  \@realmult{#3}{\yscale}\ygrpos \relvec[#1](\xgrpos,\ygrpos)}
+
+\endinput
+%%
+%% End of file `pshacks.sty'.
