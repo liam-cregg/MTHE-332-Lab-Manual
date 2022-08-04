@@ -8,3 +8,10 @@
 - Lab 8?
 - Lab 9 is short
 - Lab 3 and 4 from 430 good
+
+Lab 3
+- Include brief intro on EOMs, euler-lagrange, etc. (summary from labs 1 and 2)
+- Brief summary of control concepts (leurenburg observer, etc.)
+- Background Info
+	- Setting up pendulum
+	- Provide all matrices, etc.

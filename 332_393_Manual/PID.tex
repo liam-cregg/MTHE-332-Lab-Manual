@@ -2,7 +2,7 @@
 
 In this lab you will be examining the effects of feedback on system
 performance.  In particular, you will design a control, \(R_{C}\), for the
-motor using the principles of PID control as shown in Figure~\ref{fig:PID}\@.
+motor using the principles of PID control as shown in Figure~\ref{fig:PID}. It may be helpful to familiarize yourself with \textsf{Simulink} and \textsf{Matlab} (see e.g.\ Appendix~\ref{chap:MATLAB} and~\ref{chap:simulink}) before continuing with this lab.
 \begin{figure}[htbp]
     \centering
     \begin{picture}(300,75)
@@ -26,6 +26,8 @@ motor using the principles of PID control as shown in Figure~\ref{fig:PID}\@.
     \end{picture}
     \caption{PID control system}\label{fig:PID}
 \end{figure}%
+
+where \( \tau \) is the \emph{motor constant} and \( k_E \) is the \emph{torque constant}. These constants vary slightly between motors but for our purposes we can use the approximate values of \( \tau \approx 0.036 \) and \( k_E \approx 229.16 \). For more information regarding the hardware for this lab see Appendix~\ref{chap:hardware}.
 
 \section{Key Concepts}
 In this lab, you will be implementing a PID controller into a closed loop
@@ -59,8 +61,8 @@ controls.
               \includegraphics[width = 0.8\hsize]{pix/PIDSchematic.eps}
               \caption{Arbitrary error signal with a PID controller acting on it}\label{fig:PIDExp}
           \end{figure}
-
 \end{itemize}
+
 It is important to remember that when using  PID controllers, there will always be an element of
 compromise within your system. For example, the ideal system will have a very low rise time, with
 little to no steady state error or settling time, and no overshoot. However, this is very unrealistic in
@@ -73,56 +75,64 @@ to accept that there could be overshoot, or some steady state error.
 You will also examine the concept of system types and their relation to PID controllers. Essentially,
 systems can be type 0, 1, 2, etc \ldots A systems ``type'' determines its ability to track
 the error on a given reference trajectory. For example, a system of type \(k \) can track
-a reference trajectory with a bounded error for polynomials up to degree \(k \) (See Proposition
-8.11 from the course notes for further clarification). We will see how the different terms from the PID controller transfer function affect the system type.
+a reference trajectory with a bounded error for polynomials up to degree \(k \). We will see how the different terms from the PID controller transfer function affect the system type.
 
 \section{Background Information}
+\subsection{Definitions}
+\begin{itemize}
+    \item If our system output is \( y(t) \), then our \textbf{steady-state value} is defined by
+          \[ \bar{y} = \lim_{t \to \infty}y(t) \]
+          when the limit exists. Note that you may have to estimate this value by looking at output graphs.
+    \item \textbf{Rise time} is the smallest time when the output reaches a certain percentage of its steady-state value. For our purposes, we will set this percentage to 90\%. That is,
+          \[ t_r = \inf_t\{ t : y(t) \ge 0.9\bar{y} \} \]
+    \item \textbf{Settling time} is the smallest time after which the output stays within a certain threshold \( \epsilon \) of the steady-state value. We will set \( \epsilon = 0.5 \), so that
+          \[ t_s = \inf_{\delta}\{ \delta : |y(t) - \bar{y}| \le 0.5 \; \forall \; t \in [\delta, \infty)\} \]
+    \item \textbf{Overshoot} is the maximum difference of the output \emph{over} the steady-state value. That is,
+          \[ y_{os} = \sup_t \{y(t) - \bar{y}\} \]
+    \item \textbf{Steady-state error} is the difference between the steady-state value and the reference trajectory. If our reference is \( r(t) \), then the steady-state error is defined by
+          \[ \lim_{t \to \infty}|r(t) - y(t)| \]
+\end{itemize}
+\subsection{Transfer Functions}
+The closed loop transfer function of the system in \ref{fig:PID} is given by
+
+\begin{equation*}\label{eq:transfer}
+    T(s)= \frac{R_{C}(s)R_{P}(s)}{1+R_{C}(s)R_{P}(s)}
+\end{equation*}
+
+where \( R_C = P + I\frac{1}{s} + Ds \) is the controller and \( R_P = \frac{\kappa_E}{s(s+\frac{1}{\tau})} \) is the plant. If using P, I, or D controls individually, the transfer function becomes
 
 \begin{itemize}
-    \item \textcolor{blue}{TODO: Include some stuff from course notes?}
-    \item \textcolor{blue}{TODO: Include simulink model rather than have them make it in procedure?}
-    \item Learn the definitions for rise time, settling time, overshoot, steady-state value and steady state error.
-    \item The closed loop transfer function of the system in \ref{fig:PID} is given by
-
-          \begin{equation*}\label{eq:transfer}
-              T(s)= \frac{R_{C}(s)R_{P}(s)}{1+R_{C}(s)R_{P}(s)}
-          \end{equation*}
-
-          where \( R_C = P + I\frac{1}{s} + Ds \) is the controller and \( R_P = \frac{\kappa_E}{s(s+\frac{1}{\tau})} \) is the plant. If using P, I, and D controls individually, the
-
-    \item Determine the location of the closed loop poles when using P, I, D controls
-          individually. What condition is required on the poles such that the system is BIBO stable?
+    \item Proportional Control: \( R_C(s) = P \), so we get
+          \[ T(s) = \frac{PR_P(s)}{1+PR_P(s)} = \frac{Pk_E}{s(s+\frac{1}{\tau}) + Pk_E} \]
+    \item Derivative Control: \( R_C(s) = Ds \), so we get
+          \[ T(s) = \frac{DsR_P(s)}{1+DsR_P(s)} = \frac{Dsk_E}{s(s+\frac{1}{\tau}+Dk_E)} \]
+    \item Integral Control: \( R_C(s) = I\frac{1}{s} \), so we get
+          \[ T(s) = \frac{I\frac{1}{s}R_P(s)}{1+I\frac{1}{s}R_P(s)} = \frac{Ik_E}{s^2(s+\frac{1}{\tau}+Ik_E)} \]
 \end{itemize}
 
+Consider the location of the closed loop poles in each of these cases. What condition is required on the constants \(P\), \(D\), and \(I\), respectively, such that the system is BIBO stable?
+
 \section{Procedure}
+You will be provided (e.g. through OnQ) a \textsf{Simulink} model that implements a PID controller. See Appendix~\ref{chap:simulink} for information on working with \textsf{Simulink}. Upon opening the model file, it should look similar to Figure~\ref{fig:model6}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\hsize]{pix/performanceSpecificationModel4.jpg}
+    \caption{\textsf{Simulink} model for a DC Servo Motor
+        system}\label{fig:model6}
+\end{figure}%
+
+As shown in Figure~\ref{fig:PIDparameters}, the \verb|PID| block contains three parameters: \(P\) is the proportional gain, of the controller; \(I\) is the integral action parameter which is equal; the \(D\) term provides the derivative action.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\hsize]{pix/PID.PNG}
+    \caption{Screen shot of the \texttt{PID Controller} block}\label{fig:PIDparameters}
+\end{figure}
+Set the desired angle to 10 radians.  The desired input is entered as
+shown in Figure~\ref{fig:model6} in the \verb|Constant| block. You should double check that the ``gain'' blocks for the encoder and tachometer (these are the triangle blocks leading into them) are
+using the appropriate gain values from Table~\ref{tab:conversionFactors}. Also, check that the \verb|solver| in \verb|Configuration Parameters|
+(\verb|Ctrl+E|) is set to \verb|ode 4|.
 
 \begin{enumerate}
-    \item Prepare a \textsf{Simulink} model to implement a PID controller as
-          shown in Figure~\ref{fig:model6}\@. \emph{Modify your model from lab 1 or 2}.
-          Figure~\ref{fig:model6}\@.
-          \begin{figure}[htbp]
-              \centering
-              \includegraphics[width=0.6\hsize]{pix/performanceSpecificationModel4.jpg}
-              \caption{\textsf{Simulink} model for a DC Servo Motor
-                  system}\label{fig:model6}
-          \end{figure}%
-          The \verb|PID| block can be found in the \verb|Simulink| menu under the
-          \verb|Continuous| section parameters.
-
-          As shown in Figure~\ref{fig:PIDparameters}\@,
-          \begin{figure}[htbp]
-              \centering
-              \includegraphics[width=0.6\hsize]{pix/PID.PNG}
-              \caption{Screen shot of the \texttt{PID Controller} block}\label{fig:PIDparameters}
-          \end{figure}%
-          the \verb|PID| block contains three parameters: \(P\) is the proportional gain, of the controller; \(I\) is the integral action parameter which is equal; the \(D\) term provides the derivative action.
-    \item\label{step:2} Set the desired angle to 10 radians.  The desired input is entered as
-          shown in Figure~\ref{fig:model6} in the \verb|Constant| block. Remember to
-          use the appropriate gain values from Table~\ref{tab:conversionFactors} for
-          the encoder and tachometer to show results in radians.  Do not forget to
-          change the \verb|solver| to \verb|ode 4| in \verb|Configuration Parameters|
-          (\verb|Ctrl+E|).
-
     \item \textbf{Proportional Term}\label{step:3} \begin{enumerate}
               \item Build and run the \textsf{Simulink} model using only the
                     proportional term (i.e., set \(I\) and
@@ -132,19 +142,21 @@ a reference trajectory with a bounded error for polynomials up to degree \(k \) 
 
               \item Keep \(D\) and \(I\) at 0 and increase the value of \(P\) so the
                     system oscillates about the desired value of 10 radians without (seemingly)
-                    decreasing in magnitude. Print a copy of the encoder output at that value, and a copy when using a slightly lower value of \(P\).
+                    decreasing in magnitude. Print a copy of the encoder output at that value, and a copy when using a slightly lower value of \(P\). Why do higher \(P\) values increase the oscillation of the output? What is
+                    happening to the location of the closed loop poles in equation~\eqref{eq:transfer}?
 
               \item Now reset your \(P\) value to the ``good'' value (i.e.\ not the value that makes
                     the system oscillate about 10 radians, but the value where you get a ``desirable'' response). Plot the error response of this system (i.e.\ the difference between input and output).
               \item Repeat the previous step but this time replace the constant input with linear input (i.e.\ disconnect the ``10'' block and connect the linear block). Plot the error response.
               \item Repeat the previous step but with the quadratic input (you may have to divide the quadratic term by 2 to prevent the encoder from going out of range).
-              \item Based on the above error results, what is the type of the system when using only proportional control?
+              \item Based on the above error results, what is the type of the system when using only proportional control? Is this consistent with the BIBO stability criteria in~\eqref{eq:transfer}?
           \end{enumerate}
 
-    \item \textbf{Derivative Term}\label{step:4} \begin{enumerate}
+    \item \textbf{Derivative Term}\label{step:4}
+          \begin{enumerate}
               \item Test various \(D\) values while keeping \(P\) constant (at the ``good'' value you found in the previous section), and comment on overshoot, rise time, settling time, and steady-state error. Again, tabulate this data, and decide on some ``good'' value of \(D\).
               \item Now, set \(P\) to 0 and repeat steps (c)-(e) from \ref{step:3} using only derivative control.
-              \item Based on the above error results, what is the type of the system when using only derivative control?
+              \item Based on the above error results, what is the type of the system when using only derivative control? Is this consistent with the BIBO stability criteria in~\eqref{eq:transfer}?
           \end{enumerate}
 
     \item \textbf{Integral Term}\label{step:5} \begin{enumerate}
@@ -154,15 +166,17 @@ a reference trajectory with a bounded error for polynomials up to degree \(k \) 
 
               \item Now, set \(P\) and
                     \(D\) to zero and repeat steps (c)-(e) from \ref{step:3} using only integral control.
-              \item Based on the above error results, what is the type of the system when using only integral control?
+              \item Based on the above error results, what is the type of the system when using only integral control? Is this consistent with the BIBO stability criteria in~\eqref{eq:transfer}?
           \end{enumerate}
 
-    \item Now we will consider a more complicated function input. To make things interesting, have the desired angle behave
+    \item \textbf{Using the PID Controller with a Complicated Input}
+
+          Now we will consider a more complicated function input. To make things interesting, have the desired angle behave
           as four different functions on different intervals.  This can be achieved by
           preparing the \textsf{Simulink} model shown in Figure~\ref{fig:multiSwitch}\@.
           \emph{You do not need to use the exact same functions as shown in the figure}. Pick
           four functions that you think would be interesting.
-          \begin{figure}[htbp]
+          \begin{figure}[H]
               \centering
               \includegraphics[width=0.6\hsize]{pix/lab6b.jpg}
               \caption{\textsf{Simulink} model for the implementation of multiple inputs and PID control}\label{fig:multiSwitch}
@@ -173,35 +187,22 @@ a reference trajectory with a bounded error for polynomials up to degree \(k \) 
           assumes a value between 1 and 5 which is associated with ports 1 through 5 of
           the \verb|Multiport Switch| block.  The switching function is entered using
           the \verb|Fcn| block as indicated in Figure~\ref{fig:switchConfig}\@.
-          \begin{figure}[htbp]
+          \begin{figure}[H]
               \centering
               \includegraphics[width=0.6\hsize]{pix/fcnParameters.jpg}
               \caption{Configuration of the \texttt{Fcn} block for the implementation of multiple inputs and PID control}\label{fig:switchConfig}
           \end{figure}%
+          \newpage
+          \begin{enumerate}
+              \item Run the system and prepare a plot comparing the angle and the desired angle
+                    trajectory, making sure to note the values of the PID coefficients. You may have to tweak the PID values you found in previous sections in order to get a better trajectory.
 
-    \item Run the system and prepare a plot comparing the angle and the desired angle
-          trajectory, making sure to note the values of the PID coefficients. You may have to tweak the PID values you found in previous sections in order to get a better trajectory.
-
-          When you have completed the lab, make sure you save your files in the folder
-          you created in Lab~\ref{chap:intro}\@.
-
+                    When you have completed the lab, make sure you save your files in a convenient location (e.g.\ on some type of cloud storage).
+          \end{enumerate}
 \end{enumerate}
 
 \section{Deliverables}
-
-Prepare a brief write up describing what you learned from this lab. This does not
-need to be a formal report, but all material should be presented in a clear and logical manner,
-with concise descriptions where necessary. Include the following / answer the following questions:
-\begin{enumerate}
-    \item Include tabulated data of the response characteristics from steps~\ref{step:3}, \ref{step:4}, and~\ref{step:5}. Be sure that you are using your ``good'' \(P\) value (i.e. NOT the value that makes the system oscillate about 10 rad / s) when collecting data for \(I\) and \(D\) tests.
-    \item Comment on how varying \(P\), \(I\), and \(D\) values impact response characteristics (i.e.\ rise time, settling time, etc\ldots).
-    \item Include the plot of the output that oscillates consistently about the reference trajectory of 10 radians
-          generated in step~\ref{step:3}. Why do higher \(P\) values increase the oscillation of the output? What is
-          happening to the location of the closed loop poles in equation~\eqref{eq:transfer}?
-    \item Include the plots of the error response when using only proportional, derivative, or integral control. Using your plots, what is the system type in each case? Is this consistent with the BIBO stability criteria in~\eqref{eq:transfer}?
-    \item Include a plot of the output using your PID controller when the desired angle is generated by the multi-input
-          switch. Be sure to specify your final P, I, and D values.
-\end{enumerate}
+Prepare a brief write up describing what you learned from this lab. This does not need to be a formal report, but all material should be presented in a clear and logical manner, with concise descriptions where necessary. Include your answers to all the questions in the lab (these are the lettered sections in the procedure), as well as any requested plots.
 
 %%% Local Variables: 
 %%% mode: latex

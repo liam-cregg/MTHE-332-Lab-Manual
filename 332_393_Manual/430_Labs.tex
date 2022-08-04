@@ -3,14 +3,17 @@
 %\usepackage[pdflatex]{fullbib-bibtex}
 \usepackage{graphicx,amsfonts,amssymb,amsthm,newlfont,macros}
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 \usepackage{float}
 \usepackage{graphics}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{booktabs}
-\usepackage{tabularx}
-
-\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{tabularx}\usepackage{biblatex}
+\addbibresource{liography.bib}
+\usepackage{enumitem}
+\setlist[enumerate]{leftmargin=0em}
 
 \newcommand\mat[1]{\boldsymbol{#1}}
 \newcommand\vect[1]{\boldsymbol{#1}}
@@ -33,7 +36,7 @@
 %\input{intro1}
 \input{PID}
 %\input{performancespecifications}
-\input{nyquist}
+%\input{nyquist}
 %\input{PIDdesign}
 \input{controlandobserve}
 \input{stabilityfeedback}
