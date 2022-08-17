@@ -8,22 +8,13 @@ The purpose of this lab is to study the rotary pendulum system and to develop a 
     \label{fig:lab3_plant}
 \end{figure}
 
-\section{Key Concepts}
-\subsection{Modelling the Beam Using the Euler-Lagrange Equation}
+\section{Background Information}
+\subsection{Modelling the Pendulum Using the Euler-Lagrange Equation}
 From previous mechanics courses, you should be familiar with modelling physical systems using first principles (i.e., Newton's Laws). For simple systems, this first principles approach to modelling a physical system is relatively straightforward and works very well; however, for more complicated systems, things can get ugly very quickly. For modelling our rotary flexible beam, it is easier to use a more modern approach to modelling that employs the \emph{Euler-Lagrange equation}.
 
-The Euler-Lagrange equation is a second-order partial differential equation that will help you find the equations of motion for our physical system. Before presenting the Euler-Lagrange equation, we must first introduce some mathematical objects and notation that have strong physical interpretations.
+The Euler-Lagrange equation is a second-order partial differential equation that will help you find the equations of motion for our physical system. Those interested in the specifics of the Euler-Lagrange equation and related calculations can find them in Appendix~\ref{chap:EOMs}.
 
-To describe the configuration of the physical system relative to some reference configuration, we use coordinates (not to be confused with the coordinate axes shown in Figure~\ref{fig:lab1_rotary_flexible_beam} - we're talking about variables $\theta$ and $\alpha$ here) which we call the \emph{generalized coordinates} of the system, and we denote the $i^{th}$ generalized coordinate by $q_i$. We define the kinetic and potential energies of the system by functions of the generalized coordinates and their time derivatives, and denote them by $T$ and $V$, respectively. To summarize the dynamics of our physical system, we use the function $L$ (called the \emph{Lagrangian} of the dynamical system) which is defined by
-\[
-    L=T-V.
-\]
-In modelling a physical system, we must also consider external forces applied to the system. We do this by defining a \emph{generalized force} for each generalized coordinate $q_i$ which takes into account the effects of externally applied forces (or torques if $q_i$ is an angle) that are excluded from $V$ (e.g., the force of gravity is a potential force, not a generalized force). We denote the generalized force for $q_i$ by $Q_{q_i}$.
-The Euler-Lagrange equation is then given as follows:
-\begin{equation}\label{equation:lab1_lagrange_equns}
-    \frac{d}{dt} \Bigg(\frac{\partial L}{\partial \dot{q_i}}\Bigg)  - \frac{\partial L}{\partial q_i} = Q_{q_i}.
-\end{equation}
-To find the equation of motion for a particular coordinate $q_i$, all one must do is find $L$, $V$ and then evaluate~\eqref{equation:lab1_lagrange_equns}. For the rotary pendulum system, our coordinates will be the rotary shaft angle, $\theta$, and the pendulum rod angle, $\alpha$, so that our coordinate vector is $q(t)^T=[\theta(t) \; \alpha(t)]$. See Figure~\ref{fig:lab2_rotary_pendulum} for what these coordinates look like in the physical system.
+The coordinates we will be concerned with are the the rotary shaft angle, $\theta$, and the pendulum rod angle, $\alpha$. See Figure~\ref{fig:lab2_rotary_pendulum} for what these coordinates look like in the physical system.
 
 \begin{figure}[H]
     \centering
@@ -42,22 +33,8 @@ To find the equation of motion for a particular coordinate $q_i$, all one must d
 
 We will consider two cases: one when the pendulum is in its \textbf{downwards} position (i.e.\ \( \alpha=\pi \)), and one in its \textbf{inverted} position (i.e.\ \( \alpha=0 \)).
 
-\subsection{Setting up the Rotary Pendulum}\label{subsection:lab2_setup}
-First, let us assemble and wire the physical system. Examine the close-up assembly shown in Figure~\ref{fig:lab1a_assembly}, and replicate this at your workstation. Note that the high-gear configuration is used here. Use the wiring diagram shown in Figure~\ref{fig:lab1a_wiring} to connect the rotary pendulum to a power source and the data acquisition board.
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.3\linewidth]{eps/lab_2/assembly.eps}
-    \caption{A close-up of the assembly of the rotary pendulum module and the Quanser SRV02 plant~\cite{Q-Flex-Beam}.}
-    \label{fig:lab1a_assembly}
-\end{figure}
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.7\linewidth]{eps/lab_2/wiring.eps}
-    \caption{A wiring diagram for the Quanser SRV02 and rotary pendulum module.}
-    \label{fig:lab1a_wiring}
-\end{figure}
-
-\textbf{Note:} The power amplifier must be turned on before you can experiment with the physical system. The power switch is located at the back of the amplifier (good luck finding it). Make sure to turn off the power amplifier before you leave the lab.
+\subsection{Setting Up the Rotary Pendulum}
+The only thing you should have to do with the rotary pendulum is to turn on the power amplifier. The power switch is located at the back of the amplifier (good luck finding it). Make sure to turn off the power amplifier before you leave the lab.See Appendix~\ref{chap:hardware} for more info on the configuration of the rotary pendulum.
 
 \subsection{Feedback Gain and Pole Placement}\label{subsection:feedback}
 Recall that for $A \in \mathcal{M}^{n \times n}(\mathbb{R})$ and for $B \in \mathbb{R}^n$, if the pair $(A,B)$ is controllable, then there exists a transformation $T \in \mathcal{M}^{n \times n}(\mathbb{R})$ where $\text{det}(T) \not = 0$ and
@@ -117,189 +94,37 @@ That is, when matrix $A$ has all of its eigenvalues in the left half-plane, then
 \end{equation}
 Thus one can design an observer gain $L$ such that $\text{spec}(A-LC) \subset \mathbb{C}^-$ (i.e., an \emph{asymptotically stable observer}) and one can tune $L$ such that $\hat{\mathbf{x}}(t)$ converges to $\mathbf{x}(t)$ fast enough for the desired application. An important question to ask is, ``when does such an observer exist"? In class, you proved that one can build an observer with these properties when $(C,A)$ is \emph{detectable}.
 
-
-\section{Background Information}\label{section:lab3_prelab}
-The following sections will provide relevant matrices/equations for the lab. Don't get too caught up in the calculations, just understand the rough ideas, and use the provided matrices/equations as required.
-
-\subsection{Equations of Motion}
-We first wish to write down the EOMs for the rotary pendulum system (for coordinates \( \theta \) and \( \alpha \)) using~\eqref{equation:lab1_lagrange_equns}. Since the rotary shaft is actuated and the pendulum rod is not, and accounting for viscous friction, one can infer that $Q_\theta = \tau - B_r \dot{\theta} $ and $Q_\alpha = -B_p \dot{\alpha}$, where $\tau$ is the torque applied by the servo motor, and $B_r$, $B_p$ are the viscous damping coefficients for the rotary shaft and pendulum rod, respectively. Deriving $T$ and $V$ for the Lagrangian is not in the scope of this course, so they are provided below:
-\begin{equation*}
+\subsection{Control Technique}
+In this lab, you will be designing a feedback controller that stabilizes the system about the inverted pendulum orientation. That is, to balance the pendulum in the inverted orientation, you must design a feedback gain that renders the closed-loop system \emph{internally asymptotically stable}. Note that the state space matrices are based on linearization techniques, so they are only a good approximation on a limited domain. So when designing the balance controller, you will need to lift up the pendulum from the downwards orientation to the inverted orientation while holding the servo base, and then have the controller engage in a small domain centered at the unstable equilibrium. Thus, the controller will be of the form
+\[ u(t) =
     \begin{cases}
-        T = \left(\frac{1}{2} m_p L_{r}^2 + \frac{1}{8} m_p L_{p}^2 - \frac{1}{8} m_p L_{p}^2 \cos^2(\alpha) + \frac{1}{2} J_r\right) \dot{\theta}^2 + \left(\frac{1}{2} J_p + \frac{1}{8} m_p L_{p}^2 \right) \dot{\alpha}^2 - \frac{1}{2} m_p L_p L_r \cos(\alpha) \dot{\theta} \dot{\alpha} \\
-        V = \frac{1}{2} m_p L_p g \cos(\alpha)
-    \end{cases}
-\end{equation*}
-where $J_p$, $m_p$, and $L_p$ are the moment of inertia about the centre of mass, mass, and length of the pendulum, respectively; $J_r$, $m_r$, and $L_r$ are the moment of inertia about the centre of mass, mass, and length of the rotary shaft, respectively; and $g$ is the acceleration due to gravity (on earth).
-We compute the following sets of equations:
-\[
-    \begin{cases}
-        \frac{\partial{L}}{\partial \theta}=0                                                                                                                                                      \\
-        \frac{\partial L}{\partial \dot{\theta}}=\left( m_pL_r^2 +\frac{1}{4} m_p L_p^2-\frac{1}{4}m_pL_p^2\cos^2(\alpha)+J_r\right)\dot{\theta} - \frac{1}{2} m_pL_pL_r\cos{(\alpha)}\dot{\alpha} \\
-        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\theta}}\right)= \left(m_pL_r^2 +\frac{1}{4}m_pL_p^2-\frac{1}
-        {4}m_pL_p^2\cos^2(\alpha)+J_r\right)\ddot{\theta} + \frac{1}{2}m_pL_p^2\sin{(\alpha)}\cos{(\alpha)} \dot{\alpha}\dot{\theta}                                                               \\+ \frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\alpha}^2-\frac{1}{2}m_pL_pL_r\cos{(\alpha)}\ddot{\alpha} \\
+        K(\mathbf{x_d} - \mathbf{x}(t)) \quad |\alpha| < \epsilon; \\
+        \quad \quad 0 \quad \quad \quad \quad \text{otherwise},
     \end{cases}
 \]
+where $\epsilon$ is the angle designating when the controller will engage and $x_d$ is the desired reference state. To balance the pendulum in the inverted orientation, one should choose a desired reference state of
 \[
+    \mathbf{x_d} =
+    \left[\begin{array}{c}
+            \theta_d \\
+            0        \\
+            0        \\
+            0
+        \end{array}\right]
+\]
+where $\theta_d$ is a desired rotor base angle (one may wish that the rotor base track a desired trajectory, thus $\theta_d=\theta_d(t))$. To design an appropriate control gain that will balance the inverted pendulum, consider our closed-loop system when the controller is engaged:
+\begin{equation}
     \begin{cases}
-        \frac{\partial L}{\partial \alpha}=\frac{1}{4}m_pL_p^2\cos{(\alpha)}\sin{(\alpha)}\dot{\theta}^2+\frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\theta}\dot{\alpha}+ \frac{1}{2}m_pL_pg\sin{\alpha} \\
-        \frac{\partial L}{\partial \dot{\alpha}}= \left(J_p+\frac{1}{4}m_pL_p^2\right)\dot{\alpha}-\frac{1}{2}m_pL_pL_r\cos{(\alpha)}\dot{\theta}                                                   \\
-        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\alpha}}\right)= \left(J_p+\frac{1}{4}m_pL_p^2\right)\ddot{\alpha}+\frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\theta}\dot{\alpha}-\frac{1}{2}m_pL_pL_r\cos{(\alpha)} \ddot{\theta}
+        \mathbf{\dot{x}}(t) = \left(A-KB\right)\mathbf{x}(t) + B\mathbf{x_d}; \\
+        \mathbf{y}(t) = C\mathbf{x}(t).
     \end{cases}
-\]
-Thus, via the Euler-Lagrange equation we get the following EOMs for the coordinates. For \( \theta \):
-\begin{align*}
-     & \left(m_p L_{r}^{2} + \frac{1}{4} m_p L_{p}^{2} - \frac{1}{4} m_p L_{p}^{2} \cos^2(\alpha) + J_r\right) \ddot{\theta} - \frac{1}{2} m_p L_p L_r \cos(\alpha) \ddot{\alpha} \\
-     & + \frac{1}{2} m_p L_{p}^{2} \sin(\alpha)\cos(\alpha) \dot{\theta}\dot{\alpha} + \frac{1}{2}m_p L_p L_r \sin(\alpha) \dot{\alpha}^{2} = \tau - B_r \dot{\theta}
-\end{align*}
-And for \( \alpha \):
+    \label{equation:lab3_feedback}
+\end{equation}
 
-\begin{align*}
-     & -\frac{1}{2} m_p L_p L_r \cos(\alpha) \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} - \frac{1}{4} m_p L_{p}^{2} \sin(\alpha)\cos(\alpha) \dot{\theta}^{2} \\
-     & - \frac{1}{2} m_p L_{p} g \sin(\alpha) = - B_p \dot{\alpha}
-\end{align*}
+You can use these results to design the appropriate feedback gain $K$ to balance the inverted pendulum.
 
-\subsection{Linearization}
-Note that these EOMs are nonlinear, so we wish to linearize these equations about an equilibrium point. Recall that to linearize a multivariate function \( f \) of variables \( z^T = [\theta \; \alpha \; \dot{\theta} \; \dot{\alpha} \; \ddot{\theta} \; \ddot{\alpha}] \) around an equilibrium point \( z_{0}^T = [\theta_0 \; \alpha_0 \; \dot{\theta}_0 \; \dot{\alpha}_0 \; \ddot{\theta}_0 \; \ddot{\alpha}_0] \), we use
-\[
-    f_\text{lin} = f(z_0) + \left(\frac{\partial f(z)}{\partial \theta}\right) \bigg|_{z_0}  (\theta - \theta_0) +  \left(\frac{\partial f(z)}{\partial \alpha}\right) \bigg|_{z_0}  (\alpha - \alpha_0) + \dots +  \left(\frac{\partial f(z)}{\partial \ddot{\alpha}}\right) \bigg|_{z_0}  (\ddot{\alpha} - \ddot{\alpha}_0)
-\]
-We consider two cases for the equilibrium point.
-
-\subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
-For the generalized coordinate \( \theta \), we compute
-\[
-    \left(m_p L_{r}^{2} + J_r\right) \ddot{\theta} + \frac{1}{2} m_p L_p L_r \ddot{\alpha} = \tau - B_r \dot{\theta}
-\]
-And for the generalized coordinate \( \alpha \), we compute
-\[
-    \frac{1}{2} m_p L_p L_r \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} + \frac{1}{2} m_p L_{p} g \alpha = - B_p \dot{\alpha}
-\]
-
-\subsubsection*{Inverted Position (\( \theta_0=0, \alpha_0=0 \))}
-For the generalized coordinate \( \theta \), we compute
-\[
-    \left(m_p L_{r}^{2} + J_r\right) \ddot{\theta} - \frac{1}{2} m_p L_p L_r \ddot{\alpha} = \tau - B_r \dot{\theta}
-\]
-And for the generalized coordinate \( \alpha \), we compute
-\[
-    -\frac{1}{2} m_p L_p L_r \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} - \frac{1}{2} m_p L_{p} g \alpha = - B_p \dot{\alpha}
-\]
-
-\subsection{State-Space Representation}
-In order to find the state space representation, we first write the linearized EOMs in matrix form, i.e.,
-\[
-    \left[\begin{array}{c c}
-            e_{11} & e_{12} \\
-            e_{21} & e_{22}
-        \end{array}\right]
-    \left[\begin{array}{c}
-            \ddot{q}_{1} \\
-            \ddot{q}_{2}
-        \end{array}\right] +
-    \left[\begin{array}{c c}
-            f_{11} & f_{12} \\
-            f_{21} & f_{22}
-        \end{array}\right]
-    \left[\begin{array}{c}
-            \dot{q}_{1} \\
-            \dot{q}_{2}
-        \end{array}\right] +
-    \left[\begin{array}{c}
-            g_1 \\
-            g_2
-        \end{array}\right] =
-    \left[\begin{array}{c}
-            \tau_1 \\
-            \tau_2
-        \end{array}\right],
-\]
-and group all non double-derivative terms to the right. We can now explicitly solve for $\left[\begin{array}{c}
-            \ddot{\theta} \\
-            \ddot{\alpha}
-        \end{array}\right]$ and put it in a relatively compact form. Letting our state be
-\[
-    \mathbf{x}(t) =
-    \left[\begin{array}{c}
-            \theta(t)       \\
-            \alpha(t)       \\
-            \dot{\theta}(t) \\
-            \dot{\alpha}(t)
-        \end{array}\right]
-\]
-we obtain the following for each of the equilibirum points.
-
-\subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
-\begin{align*}
-     & \left[\begin{array}{c}
-            \dot{\theta}(t)  \\
-            \dot{\alpha}(t)  \\
-            \ddot{\theta}(t) \\
-            \ddot{\alpha}(t)
-        \end{array}\right] = \frac{1}{J_T}
-    \left[\begin{array}{c c c c}
-            0 & 0                                                     & J_T                                            & 0                                  \\
-            0 & 0                                                     & 0                                              & J_T                                \\
-            0 & \frac{1}{4} m_{p}^2 L_{p}^2 L_r g                     & -\left(J_p + \frac{1}{4} m_p L_{p}^2\right)B_r & \frac{1}{2} m_p L_p L_r B_p        \\
-            0 & -\frac{1}{2} m_p L_p g \left(J_r + m_p L_{r}^2\right) & \frac{1}{2} m_p L_p L_r B_r                    & -\left(J_r + m_p L_{r}^2\right)B_p
-        \end{array}\right]
-    \left[\begin{array}{c}
-            \theta(t)       \\
-            \alpha(t)       \\
-            \dot{\theta}(t) \\
-            \dot{\alpha}(t)
-        \end{array}\right]                    \\
-     & + \frac{1}{J_T}
-    \left[\begin{array}{c}
-            0                             \\
-            0                             \\
-            J_p + \frac{1}{4} m_p L_{p}^2 \\
-            -\frac{1}{2} m_p L_p L_r
-        \end{array}\right] \tau
-\end{align*}
-
-\subsubsection*{Inverted Position (\( \theta_0=0, \alpha_0=0 \))}
-\begin{align*}
-     & \left[\begin{array}{c}
-            \dot{\theta}(t)  \\
-            \dot{\alpha}(t)  \\
-            \ddot{\theta}(t) \\
-            \ddot{\alpha}(t)
-        \end{array}\right] = \frac{1}{J_T}
-    \left[\begin{array}{c c c c}
-            0 & 0                                                    & J_T                                            & 0                                  \\
-            0 & 0                                                    & 0                                              & J_T                                \\
-            0 & \frac{1}{4} m_{p}^2 L_{p}^2 L_r g                    & -\left(J_p + \frac{1}{4} m_p L_{p}^2\right)B_r & -\frac{1}{2} m_p L_p L_r B_p       \\
-            0 & \frac{1}{2} m_p L_p g \left(J_r + m_p L_{r}^2\right) & -\frac{1}{2} m_p L_p L_r B_r                   & -\left(J_r + m_p L_{r}^2\right)B_p
-        \end{array}\right]
-    \left[\begin{array}{c}
-            \theta(t)       \\
-            \alpha(t)       \\
-            \dot{\theta}(t) \\
-            \dot{\alpha}(t)
-        \end{array}\right]                    \\
-     & + \frac{1}{J_T}
-    \left[\begin{array}{c}
-            0                             \\
-            0                             \\
-            J_p + \frac{1}{4} m_p L_{p}^2 \\
-            \frac{1}{2} m_p L_p L_r
-        \end{array}\right] \tau
-\end{align*}
-Evaluating the symbolic state-space matrices $A$ and $B$ using the following values:
-\[
-    \begin{cases}
-        J_p = 0.001199 \; kg \cdot m^2     \\
-        J_r = 0.000998 \; kg \cdot m^2     \\
-        B_p = 0.0024 \; \frac{N\cdot s}{m} \\
-        B_r = 0.0024 \; \frac{N\cdot s}{m} \\
-        L_p = 0.3365 \; m                  \\
-        L_r = 0.2159 \; m                  \\
-        m_p = 0.1270 \; kg                 \\
-        m_r = 0.2570 \; m.
-    \end{cases}
-\]
-
-gives
+\subsection{Matrices}\label{section:lab3_prelab}
+The following sections will provide relevant matrices/equations for the lab. If you're interested in the derivation of these matrices, you can find more info in Appendix~\ref{chap:EOMs}. Make sure you use the correct matrices based on the position of the pendulum.
 
 \subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
 \[
@@ -311,7 +136,7 @@ gives
             0 & -122.03 & 89.97  & -0.0058 \\
         \end{array}\right]
 \]
-and
+
 \[
     B =
     \left[\begin{array}{c}
@@ -359,35 +184,6 @@ and
             0
         \end{array}\right].
 \]
-
-\subsection{Control Technique}
-In this lab, you will be designing a feedback controller that stabilizes the system about the inverted pendulum orientation. That is, to balance the pendulum in the inverted orientation, you must design a feedback gain that renders the closed-loop system \emph{internally asymptotically stable}. Note that linearization for the EOMs is only a good approximation on a limited domain. So when designing the balance controller, you will need to lift up the pendulum from the downwards orientation to the inverted orientation while holding the servo base, and then have the controller engage in a small domain centered at the unstable equilibrium. Thus, the controller will be of the form
-\[ u(t) =
-    \begin{cases}
-        K(\mathbf{x_d} - \mathbf{x}(t)) \quad |\alpha| < \epsilon; \\
-        \quad \quad 0 \quad \quad \quad \quad \text{otherwise},
-    \end{cases}
-\]
-where $\epsilon$ is the angle designating when the controller will engage and $x_d$ is the desired reference state. To balance the pendulum in the inverted orientation, one should choose a desired reference state of
-\[
-    \mathbf{x_d} =
-    \left[\begin{array}{c}
-            \theta_d \\
-            0        \\
-            0        \\
-            0
-        \end{array}\right]
-\]
-where $\theta_d$ is a desired rotor base angle (one may wish that the rotor base track a desired trajectory, thus $\theta_d=\theta_d(t))$. To design an appropriate control gain that will balance the inverted pendulum, consider our closed-loop system when the controller is engaged:
-\begin{equation}
-    \begin{cases}
-        \mathbf{\dot{x}}(t) = \left(A-KB\right)\mathbf{x}(t) + B\mathbf{x_d}; \\
-        \mathbf{y}(t) = C\mathbf{x}(t).
-    \end{cases}
-    \label{equation:lab3_feedback}
-\end{equation}
-
-You can use these results to design the appropriate feedback gain $K$ to balance the inverted pendulum.
 
 \section{Procedure}
 \begin{enumerate}
@@ -452,14 +248,14 @@ You can use these results to design the appropriate feedback gain $K$ to balance
                     %\end{aligned}\]
                     %}
               \item Calculate the transformation $T=\mathcal{C}_{(\tilde{A},\tilde{B})} \mathcal{C}_{(A,B)}^{-1}$. A quick way to find $\mathcal{C}_{(A,B)}$ is to use the \emph{ctrb(A,B)} MATLAB command. What is the ensuing feedback gain, $K$?
-                    \textbf{Hint:} $A-BK= T^{-1}(TAT^{-1} - TBKT^{-1})T \implies A-BK = T^{-1}(\tilde{A}-\tilde{B}\tilde{K})T$, thus $\tilde{K}=KT^{-1}$.\\
+                    \textbf{Hint:} $A-BK= T^{-1}(TAT^{-1} - TBKT^{-1})T \implies A-BK = T^{-1}(\tilde{A}-\tilde{B}\tilde{K})T$, thus $K=\tilde{K}T$.\\
                     %\drew{Answer: You should get
                     %\[
                     %K = [-5.25 \quad 28.10 \quad -2.75 \quad 3.21].
                     %\]
                     %}
 
-                    You will now use this feedback gain to experimentally balance the physical rotary pendulum system. Open \textbf{balancing\_model.mdl} and make sure that your state-space matrices $A$, $B$, $C$ and $D$ as well as your feedback gain $K$ is loaded in the MATLAB workspace. The Simulink model is shown in Figure~\ref{lab3_simulink_balance}. You may need to connect the physical system to the computer, as was done in Section~\ref{subsection:lab2_setup}. The feedback controller is activated by the Control Switch block when the pendulum angle is within an $\epsilon$-range of $\alpha = 0$ (recall that $\alpha=0$ corresponds to the pendulum being completely inverted). While the system is balancing the inverted pendulum, you will input to the system a square wave of amplitude 10, so that the servo motor (and hence $\theta$) tracks the square wave. This is done by changing the Amplitude block to 10, but only \textbf{after} the pendulum has started balancing. Note that you will have to hold the servo motor when initially lifting the pendulum to the inverted orientation, and then let it go once the pendulum is completely inverted. It may take a few tries to get the pendulum to balance.
+                    You will now use this feedback gain to experimentally balance the physical rotary pendulum system. Open \textbf{balancing\_model.mdl} and make sure that your state-space matrices $A$, $B$, $C$ and $D$ as well as your feedback gain $K$ is loaded in the MATLAB workspace. The Simulink model is shown in Figure~\ref{lab3_simulink_balance}. The feedback controller is activated by the Control Switch block when the pendulum angle is within an $\epsilon$-range of $\alpha = 0$ (recall that $\alpha=0$ corresponds to the pendulum being completely inverted). While the system is balancing the inverted pendulum, you will input to the system a square wave of amplitude 10, so that the servo motor (and hence $\theta$) tracks the square wave. So you must first get the pendulum to balance by keeping the Amplitude block at 0, \textbf{then} changing the Amplitude block to 10. Note that you will have to hold the servo motor when initially lifting the pendulum to the inverted orientation, and then let it go once the pendulum is completely inverted. It may take a few tries to get the pendulum to balance.
 
                     The curious reader may concerned with the workings of the Find State X subsystem block found in the Simulink model shown in Figure~\ref{lab3_simulink_balance}. This subsystem block uses a numerical differentiator technique to find the derivative estimations of the measured signals, $\theta$ and $\alpha$. This technique is based on using a high-gain observer~\cite{dabroom1999discrete} to estimate the derivatives of the signals. While the angular velocity of the rotor base and the pendulum are not measured and outputted from the physical system (neither are they outputted from the state-space model), one can usually estimate these variables by using such methods.
                     \begin{figure}[htb!]

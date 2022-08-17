@@ -1,0 +1,363 @@
+\chapter{State Space Representations}\label{chap:EOMs}
+
+\section{Rotary Pendulum}
+To describe the configuration of the physical system relative to some reference configuration, we use coordinates (not to be confused with the coordinate axes shown in Figure~\ref{fig:lab1_rotary_flexible_beam} - we're talking about variables $\theta$ and $\alpha$ here) which we call the \emph{generalized coordinates} of the system, and we denote the $i^{th}$ generalized coordinate by $q_i$. We define the kinetic and potential energies of the system by functions of the generalized coordinates and their time derivatives, and denote them by $T$ and $V$, respectively. To summarize the dynamics of our physical system, we use the function $L$ (called the \emph{Lagrangian} of the dynamical system) which is defined by
+\[
+    L=T-V.
+\]
+In modelling a physical system, we must also consider external forces applied to the system. We do this by defining a \emph{generalized force} for each generalized coordinate $q_i$ which takes into account the effects of externally applied forces (or torques if $q_i$ is an angle) that are excluded from $V$ (e.g., the force of gravity is a potential force, not a generalized force). We denote the generalized force for $q_i$ by $Q_{q_i}$.
+The Euler-Lagrange equation is then given as follows:
+\begin{equation}\label{equation:lab1_lagrange_equns}
+    \frac{d}{dt} \Bigg(\frac{\partial L}{\partial \dot{q_i}}\Bigg)  - \frac{\partial L}{\partial q_i} = Q_{q_i}.
+\end{equation}
+To find the equation of motion for a particular coordinate $q_i$, all one must do is find $L$, $V$ and then evaluate~\eqref{equation:lab1_lagrange_equns}. For the rotary pendulum system, our coordinates will be the rotary shaft angle, $\theta$, and the pendulum rod angle, $\alpha$, so that our coordinate vector is $q(t)^T=[\theta(t) \; \alpha(t)]$. See Figure~\ref{fig:lab2_rotary_pendulum} for what these coordinates look like in the physical system.
+
+We first wish to write down the EOMs for the rotary pendulum system (for coordinates \( \theta \) and \( \alpha \)) using~\eqref{equation:lab1_lagrange_equns}. Since the rotary shaft is actuated and the pendulum rod is not, and accounting for viscous friction, one can infer that $Q_\theta = \tau - B_r \dot{\theta} $ and $Q_\alpha = -B_p \dot{\alpha}$, where $\tau$ is the torque applied by the servo motor, and $B_r$, $B_p$ are the viscous damping coefficients for the rotary shaft and pendulum rod, respectively. Deriving $T$ and $V$ for the Lagrangian is not in the scope of this course, so they are provided below:
+\begin{equation*}
+    \begin{cases}
+        T = \left(\frac{1}{2} m_p L_{r}^2 + \frac{1}{8} m_p L_{p}^2 - \frac{1}{8} m_p L_{p}^2 \cos^2(\alpha) + \frac{1}{2} J_r\right) \dot{\theta}^2 + \left(\frac{1}{2} J_p + \frac{1}{8} m_p L_{p}^2 \right) \dot{\alpha}^2 - \frac{1}{2} m_p L_p L_r \cos(\alpha) \dot{\theta} \dot{\alpha} \\
+        V = \frac{1}{2} m_p L_p g \cos(\alpha)
+    \end{cases}
+\end{equation*}
+where $J_p$, $m_p$, and $L_p$ are the moment of inertia about the centre of mass, mass, and length of the pendulum, respectively; $J_r$, $m_r$, and $L_r$ are the moment of inertia about the centre of mass, mass, and length of the rotary shaft, respectively; and $g$ is the acceleration due to gravity (on earth).
+We compute the following sets of equations:
+\[
+    \begin{cases}
+        \frac{\partial{L}}{\partial \theta}=0                                                                                                                                                      \\
+        \frac{\partial L}{\partial \dot{\theta}}=\left( m_pL_r^2 +\frac{1}{4} m_p L_p^2-\frac{1}{4}m_pL_p^2\cos^2(\alpha)+J_r\right)\dot{\theta} - \frac{1}{2} m_pL_pL_r\cos{(\alpha)}\dot{\alpha} \\
+        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\theta}}\right)= \left(m_pL_r^2 +\frac{1}{4}m_pL_p^2-\frac{1}
+        {4}m_pL_p^2\cos^2(\alpha)+J_r\right)\ddot{\theta} + \frac{1}{2}m_pL_p^2\sin{(\alpha)}\cos{(\alpha)} \dot{\alpha}\dot{\theta}                                                               \\+ \frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\alpha}^2-\frac{1}{2}m_pL_pL_r\cos{(\alpha)}\ddot{\alpha} \\
+    \end{cases}
+\]
+\[
+    \begin{cases}
+        \frac{\partial L}{\partial \alpha}=\frac{1}{4}m_pL_p^2\cos{(\alpha)}\sin{(\alpha)}\dot{\theta}^2+\frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\theta}\dot{\alpha}+ \frac{1}{2}m_pL_pg\sin{\alpha} \\
+        \frac{\partial L}{\partial \dot{\alpha}}= \left(J_p+\frac{1}{4}m_pL_p^2\right)\dot{\alpha}-\frac{1}{2}m_pL_pL_r\cos{(\alpha)}\dot{\theta}                                                   \\
+        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\alpha}}\right)= \left(J_p+\frac{1}{4}m_pL_p^2\right)\ddot{\alpha}+\frac{1}{2}m_pL_pL_r\sin{(\alpha)}\dot{\theta}\dot{\alpha}-\frac{1}{2}m_pL_pL_r\cos{(\alpha)} \ddot{\theta}
+    \end{cases}
+\]
+Thus, via the Euler-Lagrange equation we get the following EOMs for the coordinates. For \( \theta \):
+\begin{align*}
+     & \left(m_p L_{r}^{2} + \frac{1}{4} m_p L_{p}^{2} - \frac{1}{4} m_p L_{p}^{2} \cos^2(\alpha) + J_r\right) \ddot{\theta} - \frac{1}{2} m_p L_p L_r \cos(\alpha) \ddot{\alpha} \\
+     & + \frac{1}{2} m_p L_{p}^{2} \sin(\alpha)\cos(\alpha) \dot{\theta}\dot{\alpha} + \frac{1}{2}m_p L_p L_r \sin(\alpha) \dot{\alpha}^{2} = \tau - B_r \dot{\theta}
+\end{align*}
+And for \( \alpha \):
+
+\begin{align*}
+     & -\frac{1}{2} m_p L_p L_r \cos(\alpha) \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} - \frac{1}{4} m_p L_{p}^{2} \sin(\alpha)\cos(\alpha) \dot{\theta}^{2} \\
+     & - \frac{1}{2} m_p L_{p} g \sin(\alpha) = - B_p \dot{\alpha}
+\end{align*}
+
+\subsection{Linearization}
+Note that these EOMs are nonlinear, so we wish to linearize these equations about an equilibrium point. Recall that to linearize a multivariate function \( f \) of variables \( z^T = [\theta \; \alpha \; \dot{\theta} \; \dot{\alpha} \; \ddot{\theta} \; \ddot{\alpha}] \) around an equilibrium point \( z_{0}^T = [\theta_0 \; \alpha_0 \; \dot{\theta}_0 \; \dot{\alpha}_0 \; \ddot{\theta}_0 \; \ddot{\alpha}_0] \), we use
+\[
+    f_\text{lin} = f(z_0) + \left(\frac{\partial f(z)}{\partial \theta}\right) \bigg|_{z_0}  (\theta - \theta_0) +  \left(\frac{\partial f(z)}{\partial \alpha}\right) \bigg|_{z_0}  (\alpha - \alpha_0) + \dots +  \left(\frac{\partial f(z)}{\partial \ddot{\alpha}}\right) \bigg|_{z_0}  (\ddot{\alpha} - \ddot{\alpha}_0)
+\]
+We consider two cases for the equilibrium point.
+
+\subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
+For the generalized coordinate \( \theta \), we compute
+\[
+    \left(m_p L_{r}^{2} + J_r\right) \ddot{\theta} + \frac{1}{2} m_p L_p L_r \ddot{\alpha} = \tau - B_r \dot{\theta}
+\]
+And for the generalized coordinate \( \alpha \), we compute
+\[
+    \frac{1}{2} m_p L_p L_r \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} + \frac{1}{2} m_p L_{p} g \alpha = - B_p \dot{\alpha}
+\]
+
+\subsubsection*{Inverted Position (\( \theta_0=0, \alpha_0=0 \))}
+For the generalized coordinate \( \theta \), we compute
+\[
+    \left(m_p L_{r}^{2} + J_r\right) \ddot{\theta} - \frac{1}{2} m_p L_p L_r \ddot{\alpha} = \tau - B_r \dot{\theta}
+\]
+And for the generalized coordinate \( \alpha \), we compute
+\[
+    -\frac{1}{2} m_p L_p L_r \ddot{\theta} + \left(J_p + \frac{1}{4} m_p L_{p}^{2}\right)\ddot{\alpha} - \frac{1}{2} m_p L_{p} g \alpha = - B_p \dot{\alpha}
+\]
+
+\subsection{State-Space Representation}
+In order to find the state space representation, we first write the linearized EOMs in matrix form, i.e.,
+\[
+    \left[\begin{array}{c c}
+            e_{11} & e_{12} \\
+            e_{21} & e_{22}
+        \end{array}\right]
+    \left[\begin{array}{c}
+            \ddot{q}_{1} \\
+            \ddot{q}_{2}
+        \end{array}\right] +
+    \left[\begin{array}{c c}
+            f_{11} & f_{12} \\
+            f_{21} & f_{22}
+        \end{array}\right]
+    \left[\begin{array}{c}
+            \dot{q}_{1} \\
+            \dot{q}_{2}
+        \end{array}\right] +
+    \left[\begin{array}{c}
+            g_1 \\
+            g_2
+        \end{array}\right] =
+    \left[\begin{array}{c}
+            \tau_1 \\
+            \tau_2
+        \end{array}\right],
+\]
+and group all non double-derivative terms to the right. We can now explicitly solve for $\left[\begin{array}{c}
+            \ddot{\theta} \\
+            \ddot{\alpha}
+        \end{array}\right]$ and put it in a relatively compact form. Letting our state be
+\[
+    \mathbf{x}(t) =
+    \left[\begin{array}{c}
+            \theta(t)       \\
+            \alpha(t)       \\
+            \dot{\theta}(t) \\
+            \dot{\alpha}(t)
+        \end{array}\right]
+\]
+we obtain the following for each of the equilibirum points.
+
+\subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
+\begin{align*}
+     & \left[\begin{array}{c}
+            \dot{\theta}(t)  \\
+            \dot{\alpha}(t)  \\
+            \ddot{\theta}(t) \\
+            \ddot{\alpha}(t)
+        \end{array}\right] = \frac{1}{J_T}
+    \left[\begin{array}{c c c c}
+            0 & 0                                                     & J_T                                            & 0                                  \\
+            0 & 0                                                     & 0                                              & J_T                                \\
+            0 & \frac{1}{4} m_{p}^2 L_{p}^2 L_r g                     & -\left(J_p + \frac{1}{4} m_p L_{p}^2\right)B_r & \frac{1}{2} m_p L_p L_r B_p        \\
+            0 & -\frac{1}{2} m_p L_p g \left(J_r + m_p L_{r}^2\right) & \frac{1}{2} m_p L_p L_r B_r                    & -\left(J_r + m_p L_{r}^2\right)B_p
+        \end{array}\right]
+    \left[\begin{array}{c}
+            \theta(t)       \\
+            \alpha(t)       \\
+            \dot{\theta}(t) \\
+            \dot{\alpha}(t)
+        \end{array}\right]                    \\
+     & + \frac{1}{J_T}
+    \left[\begin{array}{c}
+            0                             \\
+            0                             \\
+            J_p + \frac{1}{4} m_p L_{p}^2 \\
+            -\frac{1}{2} m_p L_p L_r
+        \end{array}\right] \tau
+\end{align*}
+
+\subsubsection*{Inverted Position (\( \theta_0=0, \alpha_0=0 \))}
+\begin{align*}
+     & \left[\begin{array}{c}
+            \dot{\theta}(t)  \\
+            \dot{\alpha}(t)  \\
+            \ddot{\theta}(t) \\
+            \ddot{\alpha}(t)
+        \end{array}\right] = \frac{1}{J_T}
+    \left[\begin{array}{c c c c}
+            0 & 0                                                    & J_T                                            & 0                                  \\
+            0 & 0                                                    & 0                                              & J_T                                \\
+            0 & \frac{1}{4} m_{p}^2 L_{p}^2 L_r g                    & -\left(J_p + \frac{1}{4} m_p L_{p}^2\right)B_r & -\frac{1}{2} m_p L_p L_r B_p       \\
+            0 & \frac{1}{2} m_p L_p g \left(J_r + m_p L_{r}^2\right) & -\frac{1}{2} m_p L_p L_r B_r                   & -\left(J_r + m_p L_{r}^2\right)B_p
+        \end{array}\right]
+    \left[\begin{array}{c}
+            \theta(t)       \\
+            \alpha(t)       \\
+            \dot{\theta}(t) \\
+            \dot{\alpha}(t)
+        \end{array}\right]                    \\
+     & + \frac{1}{J_T}
+    \left[\begin{array}{c}
+            0                             \\
+            0                             \\
+            J_p + \frac{1}{4} m_p L_{p}^2 \\
+            \frac{1}{2} m_p L_p L_r
+        \end{array}\right] \tau
+\end{align*}
+Evaluating the symbolic state-space matrices $A$ and $B$ using the following values:
+\[
+    \begin{cases}
+        J_p = 0.001199 \; kg \cdot m^2     \\
+        J_r = 0.000998 \; kg \cdot m^2     \\
+        B_p = 0.0024 \; \frac{N\cdot s}{m} \\
+        B_r = 0.0024 \; \frac{N\cdot s}{m} \\
+        L_p = 0.3365 \; m                  \\
+        L_r = 0.2159 \; m                  \\
+        m_p = 0.1270 \; kg                 \\
+        m_r = 0.2570 \; m.
+    \end{cases}
+\]
+
+we get
+\subsubsection*{Downwards Position (\( \theta_0=0, \alpha_0=\pi \))}
+\[
+    A =
+    \left[\begin{array}{c c c c}
+            0 & 0       & 1      & 0       \\
+            0 & 0       & 0      & 1       \\
+            0 & 81.38   & -93.49 & 0.0038  \\
+            0 & -122.03 & 89.97  & -0.0058 \\
+        \end{array}\right]
+\]
+
+\[
+    B =
+    \left[\begin{array}{c}
+            0     \\
+            0     \\
+            83.64 \\
+            -80.48
+        \end{array}\right].
+\]
+
+\subsubsection*{Inverted Position (\( \theta_0=0, \alpha_0=0 \))}
+\[
+    A =
+    \left[\begin{array}{c c c c}
+            0 & 0      & 1      & 0     \\
+            0 & 0      & 0      & 1     \\
+            0 & 81.38  & -46.05 & -0.93 \\
+            0 & 122.03 & -44.31 & -1.39
+        \end{array}\right],
+\]
+\[
+    B =
+    \left[\begin{array}{c}
+            0     \\
+            0     \\
+            83.64 \\
+            80.48
+        \end{array}\right],
+\]
+
+For both positions, given that the physical system’s sensors are limited to reading the rotor angle and the deflection angle, our state space matrices \(C\) and \(D\) are
+
+\[
+    C =
+    \left[\begin{array}{c c c c}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0
+        \end{array}\right]
+\]
+and
+\[
+    D =
+    \left[\begin{array}{c}
+            0 \\
+            0
+        \end{array}\right].
+\]
+
+\section{Flexible Beam}
+\begin{equation*}
+    \begin{cases}
+        T = \frac{1}{2}J_r \dot{\theta}^2 + \frac{1}{2} J_b \left(\dot{\theta}+\dot{\alpha}\right)^2 \\
+        V = \frac{1}{2} K_b \alpha^2
+    \end{cases}
+\end{equation*}
+
+\[
+    \begin{cases}
+        \frac{\partial L}{\partial \theta}=0                                                                                             \\
+        \frac{\partial L}{\partial \dot{\theta}}=J_r\dot{\theta}+J_b\left(\dot{\theta}+\dot{\alpha}\right)                               \\
+        \frac{d}{dt} \left(\partial \frac{L}{\partial \dot{\theta}}\right)= J_r\ddot{\theta}+J_b\left(\ddot{\theta}+\ddot{\alpha}\right) \\
+    \end{cases}
+\]
+
+\[
+    \begin{cases}
+        \frac{\partial L}{\partial \alpha}=K_b\alpha                                                                    \\
+        \frac{\partial L}{\partial \dot{\theta}}=J_b\left(\dot{\theta}+\dot{\alpha}\right)                              \\
+        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\theta}}\right)= J_b\left(\ddot{\theta}+\ddot{\alpha}\right) \\
+    \end{cases}
+\]
+
+which yield, via the Euler-Lagrange equation,
+
+\[
+    \left(J_r + J_b\right)\ddot{\theta} + J_b \ddot{\alpha} = \tau - B_r \dot{\theta}.
+\]
+
+\[
+    J_b \left(\ddot{\theta} + \ddot{\alpha}\right) + K_b \alpha = -B_b \dot{\alpha}.
+\]
+
+Thus, letting our state be
+\[
+    x(t) =
+    \left[\begin{array}{c}
+            \theta(t)       \\
+            \alpha(t)       \\
+            \dot{\theta}(t) \\
+            \dot{\alpha}(t)
+        \end{array}\right].
+\]
+and assuming the viscous damping of the beam is negligible (so $B_b = 0$), we get the following state-space representation:
+
+\[
+    \left[\begin{array}{c}
+            \dot{\theta}(t)  \\
+            \dot{\alpha}(t)  \\
+            \ddot{\theta}(t) \\
+            \ddot{\alpha}(t)
+        \end{array}\right] =
+    \left[\begin{array}{c c c c}
+            0 & 0                                          & 1                & 0 \\
+            0 & 0                                          & 0                & 1 \\
+            0 & \frac{K_b}{J_r}                            & -\frac{B_r}{J_r} & 0 \\
+            0 & -\frac{K_b\left(J_b + J_r\right)}{J_b J_r} & \frac{B_r}{J_r}  & 0
+        \end{array}\right]
+    \left[\begin{array}{c}
+            \theta(t)       \\
+            \alpha(t)       \\
+            \dot{\theta}(t) \\
+            \dot{\alpha}(t)
+        \end{array}\right] \\ +
+    \left[\begin{array}{c}
+            0             \\
+            0             \\
+            \frac{1}{J_r} \\
+            -\frac{1}{J_r}
+        \end{array}\right] \tau
+\]
+
+Evaluating these matrices numerically, we get
+
+\[
+    A =
+    \left[\begin{array}{c c c c}
+            0 & 0       & 1      & 0 \\
+            0 & 0       & 0      & 1 \\
+            0 & 623.77  & -40.49 & 0 \\
+            0 & -965.53 & 40.49  & 0
+        \end{array}\right]
+\]
+and
+\[
+    B =
+    \left[\begin{array}{c}
+            0      \\
+            0      \\
+            61.775 \\
+            -61.775
+        \end{array}\right].
+\]
+
+And using the fact that \(y = Cx + Du\),
+
+\[
+    C =
+    \left[\begin{array}{c c c c}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0
+        \end{array}\right]
+\]
+and
+\[
+    D =
+    \left[\begin{array}{c}
+            0 \\
+            0
+        \end{array}\right],
+\]

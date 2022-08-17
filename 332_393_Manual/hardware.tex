@@ -8,7 +8,8 @@ education and research. This document introduces some of the hardware
 equipment to be used in the labs. Familiarity with this document is needed to
 perform the labs.
 
-\section{Hardware devices}
+\section{Servomotor (Lab 1)}
+\subsection{Hardware devices}
 
 The lab hardware consists of three components:
 \begin{enumerate}
@@ -17,7 +18,7 @@ The lab hardware consists of three components:
     \item servomotors.
 \end{enumerate}
 
-\section{Data Acquisition Board}
+\subsection{Data Acquisition Board}
 
 In order for the computer to run a controller, analog-to-digital (A/D) and
 digital-to-analog (D/A) conversions are necessary. These are done using the
@@ -40,7 +41,7 @@ Quanser) is the red RCA plug and is plugged into channel~0 is the ADC
 portion of the board.  Finally the analog output is the solo black RCA plug
 and is plugged in to channel~0 of the DAC portion of the board.
 
-\section{Universal power module}
+\subsection{Universal power module}
 
 The universal power module (UPM-2405), which is shown in
 Figure~\ref{fig:power}\@,
@@ -84,7 +85,7 @@ UPM).
           plug terminals.
 \end{itemize}
 
-\section{DC servomotor}
+\subsection{DC servomotor}
 
 The Quanser DC servomotor (SRV02) is shown in Figure~\ref{fig:motor}\@.  A 3W
 motor is mounted in a solid aluminium frame and drives a built-in Swiss-made
@@ -120,6 +121,39 @@ units of degrees or radians.
     \end{tabular}
     \caption{Conversion factors}\label{tab:conversionFactors}
 \end{table}
+
+\section{Rotary Pendulum (Lab 3)}
+\subsection{Setting up the Rotary Pendulum}\label{subsection:lab2_setup}
+First, let us assemble and wire the physical system. Examine the close-up assembly shown in Figure~\ref{fig:lab1a_assembly}, and replicate this at your workstation. Note that the high-gear configuration is used here. Use the wiring diagram shown in Figure~\ref{fig:lab1a_wiring} to connect the rotary pendulum to a power source and the data acquisition board.
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.3\linewidth]{eps/lab_2/assembly.eps}
+    \caption{A close-up of the assembly of the rotary pendulum module and the Quanser SRV02 plant~\cite{Q-Flex-Beam}.}
+    \label{fig:lab1a_assembly}
+\end{figure}
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.7\linewidth]{eps/lab_2/wiring.eps}
+    \caption{A wiring diagram for the Quanser SRV02 and rotary pendulum module.}
+    \label{fig:lab1a_wiring}
+\end{figure}
+
+\textbf{Note:} The power amplifier must be turned on before you can experiment with the physical system. The power switch is located at the back of the amplifier (good luck finding it). Make sure to turn off the power amplifier before you leave the lab.
+
+\section{Flexible Beam {Lab 4}}
+First, you must assemble and wire the physical system correctly. Examine the close-up assembly shown in Figure~\ref{fig:lab1_assembly} and replicate this at your workstation. Note that the high-gear configuration is used here: a large gear is connected to a small pinion and a slip gear, rather than using the smaller gear. You will need to build a two-tiered gear train as shown in Figure~\ref{fig:lab1_assembly} to make the large gear fit correctly. Use the wiring diagram shown in Figure~\ref{fig:lab1_wiring} to connect the rotary pendulum to a power source and the data acquisition board.
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.3\linewidth]{eps/lab_1/assembly.eps}
+    \caption{A close-up of the assembly of the rotary flexible beam module and the Quanser SRV02 plant~\cite{Q-Flex-Beam}. The high-gear gear train is indicated by a red box.}
+    \label{fig:lab1_assembly}
+\end{figure}
+\begin{figure}[htb!]
+    \centering
+    \includegraphics[width=.8\linewidth]{eps/lab_1/wiring.eps}
+    \caption{A wiring diagram for the Quanser SRV02 and rotary flexible beam module.}
+    \label{fig:lab1_wiring}
+\end{figure}
 
 %%% Local Variables: 
 %%% mode: latex

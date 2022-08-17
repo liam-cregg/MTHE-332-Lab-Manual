@@ -8,21 +8,27 @@ The purpose of this lab is to design and optimize a feedback controller for the 
     \label{fig:lab4_plant}
 \end{figure}
 
-\section{Key Concepts}
+\section{Background Information}
+\subsection{Modelling the Beam Using the Euler Lagrange Equation}
+For now, we will study the simplest model of the rotary flexible beam - the 2-degree-of-freedom model. Thus, our two coordinates of interest are the rotation angle \( \theta \) and the deflection angle \( \alpha \). See below for what these coordinates look like in the physical system.
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}{.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{eps/lab_1/quanser.eps}
+        \caption{}
+    \end{subfigure}\hfill
+    \begin{subfigure}{,4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{eps/lab_1/rotary_flexible_beam_edit.eps}
+        \caption{}
+    \end{subfigure}
+    \caption{(a) Physical rotary flexible beam system~\cite{Q-Flex-Beam}; (b) top view of a 2-DOF model of the physical system with one flexible body and one rigid base, where the flexible body and the rotor base both rotate in the horizontal plane. The reference coordinate axes are shown by $\{s_1,s_2,s_3\}$, the rotor base coordinate axes are shown by $\{b_{1,1},b_{1,2}, b_{1,3}\}$, and the flexible body coordinate axes are shown by $\{b_{2,1},b_{2,2},b_{2,3}\}$. The centres of mass for both bodies are shown in red, and the rotation angle, $\theta$, and deflection angle of the beam's tip, $\alpha$, are shown.}
+    \label{fig:lab1_rotary_flexible_beam}
+\end{figure}
+
 \subsubsection{Setting up the Rotary Flexible Beam}\label{sub subsection:lab1_setup}
-First, you must assemble and wire the physical system correctly. Examine the close-up assembly shown in Figure~\ref{fig:lab1_assembly} and replicate this at your workstation. Note that the high-gear configuration is used here: a large gear is connected to a small pinion and a slip gear, rather than using the smaller gear. You will need to build a two-tiered gear train as shown in Figure~\ref{fig:lab1_assembly} to make the large gear fit correctly. Use the wiring diagram shown in Figure~\ref{fig:lab1_wiring} to connect the rotary pendulum to a power source and the data acquisition board.
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.3\linewidth]{eps/lab_1/assembly.eps}
-    \caption{A close-up of the assembly of the rotary flexible beam module and the Quanser SRV02 plant~\cite{Q-Flex-Beam}. The high-gear gear train is indicated by a red box.}
-    \label{fig:lab1_assembly}
-\end{figure}
-\begin{figure}[htb!]
-    \centering
-    \includegraphics[width=.8\linewidth]{eps/lab_1/wiring.eps}
-    \caption{A wiring diagram for the Quanser SRV02 and rotary flexible beam module.}
-    \label{fig:lab1_wiring}
-\end{figure}
+The only thing you should have to do with the beam is to turn on the power amplifier. The power switch is located at the back of the amplifier (good luck finding it). Make sure to turn off the power amplifier before you leave the lab.See Appendix~\ref{chap:hardware} for more info on the configuration of the flexible beam.
 
 \subsection{The LQ Problem}
 A fundamental problem in control theory is operating a control system at minimum cost. When concerned with linear differential equations (e.g., $\mathbf{\dot{x}}(t) = A\mathbf{x}(t) + Bu(t)$) and quadratic cost functions, then one is really concerned with the \emph{LQ problem}. In this lab, we will use a main result from this area of literature~\cite{kwakernaak1972linear} which is the solution to the linear quadratic regulator (LQR). The solution to the LQR will help you design a feedback controller which minimizes the deflections of the flexible beam while the rotor base tracks a square wave trajectory (within certain \emph{design constraints} on settling time and overshoot).
@@ -50,85 +56,11 @@ the next main result is that with $(A,B,C)$ a minimal realization, the controlle
 \]
 solves the LQ problem.
 
-\section{Background Information}\label{section:lab4_prelab}
+\subsection{Matrices}\label{section:lab4_prelab}
 The following sections will provide relevant matrices/equations for the lab. Don't get too caught up in the calculations, just understand the rough ideas, and use the provided matrices/equations as required.
 
 \subsection{Equations of Motion for the Rotary Flexible Beam}
-In a similar fashion to Lab 3, one can find the EOMs for the rotary flexible beam using the Euler-Lagrange equation. The necessary equations are:
-
-\begin{equation*}
-    \begin{cases}
-        T = \frac{1}{2}J_r \dot{\theta}^2 + \frac{1}{2} J_b \left(\dot{\theta}+\dot{\alpha}\right)^2 \\
-        V = \frac{1}{2} K_b \alpha^2
-    \end{cases}
-\end{equation*}
-
-\[
-    \begin{cases}
-        \frac{\partial L}{\partial \theta}=0                                                                                             \\
-        \frac{\partial L}{\partial \dot{\theta}}=J_r\dot{\theta}+J_b\left(\dot{\theta}+\dot{\alpha}\right)                               \\
-        \frac{d}{dt} \left(\partial \frac{L}{\partial \dot{\theta}}\right)= J_r\ddot{\theta}+J_b\left(\ddot{\theta}+\ddot{\alpha}\right) \\
-    \end{cases}
-\]
-
-\[
-    \begin{cases}
-        \frac{\partial L}{\partial \alpha}=K_b\alpha                                                                    \\
-        \frac{\partial L}{\partial \dot{\theta}}=J_b\left(\dot{\theta}+\dot{\alpha}\right)                              \\
-        \frac{d}{dt} \left(\frac{\partial L}{\partial \dot{\theta}}\right)= J_b\left(\ddot{\theta}+\ddot{\alpha}\right) \\
-    \end{cases}
-\]
-
-which yield, via the Euler-Lagrange equation,
-
-\[
-    \left(J_r + J_b\right)\ddot{\theta} + J_b \ddot{\alpha} = \tau - B_r \dot{\theta}.
-\]
-
-\[
-    J_b \left(\ddot{\theta} + \ddot{\alpha}\right) + K_b \alpha = -B_b \dot{\alpha}.
-\]
-
-Thus, letting our state be
-\[
-    x(t) =
-    \left[\begin{array}{c}
-            \theta(t)       \\
-            \alpha(t)       \\
-            \dot{\theta}(t) \\
-            \dot{\alpha}(t)
-        \end{array}\right].
-\]
-and assuming the viscous damping of the beam is negligible (so $B_b = 0$), we get the following state-space representation:
-
-\[
-    \left[\begin{array}{c}
-            \dot{\theta}(t)  \\
-            \dot{\alpha}(t)  \\
-            \ddot{\theta}(t) \\
-            \ddot{\alpha}(t)
-        \end{array}\right] =
-    \left[\begin{array}{c c c c}
-            0 & 0                                          & 1                & 0 \\
-            0 & 0                                          & 0                & 1 \\
-            0 & \frac{K_b}{J_r}                            & -\frac{B_r}{J_r} & 0 \\
-            0 & -\frac{K_b\left(J_b + J_r\right)}{J_b J_r} & \frac{B_r}{J_r}  & 0
-        \end{array}\right]
-    \left[\begin{array}{c}
-            \theta(t)       \\
-            \alpha(t)       \\
-            \dot{\theta}(t) \\
-            \dot{\alpha}(t)
-        \end{array}\right] \\ +
-    \left[\begin{array}{c}
-            0             \\
-            0             \\
-            \frac{1}{J_r} \\
-            -\frac{1}{J_r}
-        \end{array}\right] \tau
-\]
-
-Evaluating these matrices numerically, we get
+In a similar fashion to Lab 3, one can find the EOMs for the rotary flexible beam using the Euler-Lagrange equation and get state space matrices from these. See Appendix~\ref{chap:EOMs} for the derivations.
 
 \[
     A =
@@ -139,7 +71,7 @@ Evaluating these matrices numerically, we get
             0 & -965.53 & 40.49  & 0
         \end{array}\right]
 \]
-and
+
 \[
     B =
     \left[\begin{array}{c}
@@ -159,7 +91,7 @@ And using the fact that \(y = Cx + Du\),
             0 & 1 & 0 & 0
         \end{array}\right]
 \]
-and
+
 \[
     D =
     \left[\begin{array}{c}

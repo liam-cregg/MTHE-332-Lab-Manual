@@ -29,7 +29,7 @@ motor using the principles of PID control as shown in Figure~\ref{fig:PID}. It m
 
 where \( \tau \) is the \emph{motor constant} and \( k_E \) is the \emph{torque constant}. These constants vary slightly between motors but for our purposes we can use the approximate values of \( \tau \approx 0.036 \) and \( k_E \approx 229.16 \). For more information regarding the hardware for this lab see Appendix~\ref{chap:hardware}.
 
-\section{Key Concepts}
+\section{Background Information}
 In this lab, you will be implementing a PID controller into a closed loop
 system. The main issue with open loop systems is that we only have
 control over the reference trajectory, and therefore cannot account for
@@ -77,7 +77,6 @@ systems can be type 0, 1, 2, etc \ldots A systems ``type'' determines its abilit
 the error on a given reference trajectory. For example, a system of type \(k \) can track
 a reference trajectory with a bounded error for polynomials up to degree \(k \). We will see how the different terms from the PID controller transfer function affect the system type.
 
-\section{Background Information}
 \subsection{Definitions}
 \begin{itemize}
     \item If our system output is \( y(t) \), then our \textbf{steady-state value} is defined by
